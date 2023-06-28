@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
+import { user } from './helpers';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -15,10 +16,35 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
+  it('It should signup an user', async () => {
+    const result = await request(app.getHttpServer())
+      .post('/account/signup')
+      .send(user)
+      .expect(201)
+      .expect((res) => {
+        expect(res.body).toHaveProperty('currentUser')
+        expect(res.body).toHaveProperty('tokens')
+      })
+      
+      return result
   });
+
+
+  it('It should login an user', async () => {
+    const result = await request(app.getHttpServer())
+    .post('/account/signin')
+    .send({
+      email : "eze@gmail.com",
+      password : "Abcde12345#"
+    })
+    .expect(200)
+    .expect((res) => {
+      expect(res.body).toHaveProperty('currentUser')
+      expect(res.body).toHaveProperty('tokens')
+    })
+  })
+
+  afterAll(() => {
+    app.close()
+  })
 });

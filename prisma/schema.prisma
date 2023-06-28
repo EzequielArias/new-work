@@ -23,8 +23,8 @@ model Account {
   email       String           @unique @db.VarChar(100)
   isDeleted   Boolean          @default(false)
   type_rol    Type_rol         @relation(fields: [Type_rol_id], references: [id]) //Belongs to a Type_rol
-  Type_rol_id String
-  password    String
+  Type_rol_id String           @default("367546e4-0444-4bd6-8837-f491f65b8ca1") // I have to change this iD
+  password    String      
   rt_hash     String           @default("")
   isVerified  Boolean          @default(false)
   posts       Posts[]

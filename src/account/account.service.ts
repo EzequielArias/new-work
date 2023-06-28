@@ -12,6 +12,7 @@ import {
   VerifyTokenPayload,
 } from './types';
 import * as nodemailer from 'nodemailer';
+import * as nodemailer_sendgrind from 'nodemailer-sendgrid';
 
 @Injectable()
 export class AccountService {
@@ -92,26 +93,24 @@ export class AccountService {
   }
 
   async sendVerificationEmail(email: string, userId: string): Promise<void> {
+
     try {
+      // I have to colocate this token in a URL
       let token: VerifyToken = await this.verifyToken(userId, email);
 
-      let transport = nodemailer.createTransport({
-        host: 'sandbox.smtp.mailtrap.io',
-        port: 2525,
-        auth: {
-          user: '27958fb0c72b87',
-          pass: '0bbacdcdba3498',
-        },
-      });
+      const HTMLtemplate = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet"><title>Document</title><style>*{box-sizing:border-box;margin:0}div{display:flex;flex-direction:column;align-items:center;justify-content:center;color:black;background-color:azure;height:85vh}img{height:90px;width:90px;margin-bottom:50px}p{text-align:center;margin-bottom:1em;font-family:'Roboto',sans-serif}button{padding:1em;font-size:1em}a{text-decoration:none;color:black}footer{height:15vh;background-color:cadetblue}.p-pd{margin-top:10px;font-size:.7em}footer{color:white;text-align:center}footer a{color:white}</style></head><body><div><img src="../assets/emailCheck.png" alt="emailCheck"/><p>Haz click en el boton para verificar tu cuenta de email!</p><button><a href="">Click me</a></button><p class="p-pd">El boton solo es valido durante 15 minutos</p></div><footer><p>This website was made by <a href="">Ezequiel Arias</a></p></footer></body></html>`
+
+      const transport = nodemailer.createTransport(nodemailer_sendgrind({
+        apiKey : this.config.get('SENDGRIND_KEY')
+      }))
 
       await transport.sendMail({
-        from: 'newWork-team@gmail.com',
+        from: 'ezequielariasdev@gmail.com',
         to: email,
         subject: 'Email de verificacion',
-        html: `<div>Haz click en el enlace para verificar tu mail
-        <a>http://localhost:3000/verify-account?token=${token.verify_token}</a>
-        </div>`,
+        html: HTMLtemplate,
       });
+
     } catch (error) {}
   }
 

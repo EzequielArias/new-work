@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Account` MODIFY `Type_rol_id` VARCHAR(191) NOT NULL DEFAULT '367546e4-0444-4bd6-8837-f491f65b8ca1';

@@ -13,9 +13,6 @@ export class AccountDto {
   @IsNotEmpty()
   email: string;
 
-  @IsNotEmpty()
-  followers: JSON;
-
   @IsString()
   @IsNotEmpty()
   Type_rol_id: string;
