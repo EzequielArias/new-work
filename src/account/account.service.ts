@@ -86,23 +86,23 @@ export class AccountService {
       return {
         verify_token: vt,
       };
-
     } catch (error) {
       console.log(error);
     }
   }
 
   async sendVerificationEmail(email: string, userId: string): Promise<void> {
-
     try {
       // I have to colocate this token in a URL
       let token: VerifyToken = await this.verifyToken(userId, email);
 
-      const HTMLtemplate = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet"><title>Document</title><style>*{box-sizing:border-box;margin:0}div{display:flex;flex-direction:column;align-items:center;justify-content:center;color:black;background-color:azure;height:85vh}img{height:90px;width:90px;margin-bottom:50px}p{text-align:center;margin-bottom:1em;font-family:'Roboto',sans-serif}button{padding:1em;font-size:1em}a{text-decoration:none;color:black}footer{height:15vh;background-color:cadetblue}.p-pd{margin-top:10px;font-size:.7em}footer{color:white;text-align:center}footer a{color:white}</style></head><body><div><img src="../assets/emailCheck.png" alt="emailCheck"/><p>Haz click en el boton para verificar tu cuenta de email!</p><button><a href="">Click me</a></button><p class="p-pd">El boton solo es valido durante 15 minutos</p></div><footer><p>This website was made by <a href="">Ezequiel Arias</a></p></footer></body></html>`
+      const HTMLtemplate = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet"><title>Document</title><style>*{box-sizing:border-box;margin:0}div{display:flex;flex-direction:column;align-items:center;justify-content:center;color:black;background-color:azure;height:85vh}img{height:90px;width:90px;margin-bottom:50px}p{text-align:center;margin-bottom:1em;font-family:'Roboto',sans-serif}button{padding:1em;font-size:1em}a{text-decoration:none;color:black}footer{height:15vh;background-color:cadetblue}.p-pd{margin-top:10px;font-size:.7em}footer{color:white;text-align:center}footer a{color:white}footer a:hover{color:black;}</style></head><body><div><img src="../assets/emailCheck.png" alt="emailCheck" /><p>Haz click en el boton para verificar tu cuenta de email!</p><button><a href="localhost:8080/verify-account">Click me</a></button><p class="p-pd">El boton solo es valido durante 15 minutos</p></div><footer><p>This website was made by <a href="" id="btn">Ezequiel Arias</a></p></footer><script>const btn=document.getElementById('btn');btn.addEventListener('click',()=>{fetch('http://localhost:8080/verify-account',{method:'POST',headers:{'Authorization':'${token}'}}).then(res=>res.json()).catch(err=>console.log(err))})</script></body></html>`;
 
-      const transport = nodemailer.createTransport(nodemailer_sendgrind({
-        apiKey : this.config.get('SENDGRIND_KEY')
-      }))
+      const transport = nodemailer.createTransport(
+        nodemailer_sendgrind({
+          apiKey: this.config.get('SENDGRIND_KEY'),
+        }),
+      );
 
       await transport.sendMail({
         from: 'ezequielariasdev@gmail.com',
@@ -110,7 +110,6 @@ export class AccountService {
         subject: 'Email de verificacion',
         html: HTMLtemplate,
       });
-
     } catch (error) {}
   }
 
@@ -208,5 +207,4 @@ export class AccountService {
       },
     });
   }
-
 }

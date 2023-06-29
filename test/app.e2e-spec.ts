@@ -22,29 +22,28 @@ describe('AppController (e2e)', () => {
       .send(user)
       .expect(201)
       .expect((res) => {
-        expect(res.body).toHaveProperty('currentUser')
-        expect(res.body).toHaveProperty('tokens')
-      })
-      
-      return result
-  });
+        expect(res.body).toHaveProperty('currentUser');
+        expect(res.body).toHaveProperty('tokens');
+      });
 
+    return result;
+  });
 
   it('It should login an user', async () => {
     const result = await request(app.getHttpServer())
-    .post('/account/signin')
-    .send({
-      email : "eze@gmail.com",
-      password : "Abcde12345#"
-    })
-    .expect(200)
-    .expect((res) => {
-      expect(res.body).toHaveProperty('currentUser')
-      expect(res.body).toHaveProperty('tokens')
-    })
-  })
+      .post('/account/signin')
+      .send({
+        email: 'eze@gmail.com',
+        password: 'Abcde12345#',
+      })
+      .expect(200)
+      .expect((res) => {
+        expect(res.body).toHaveProperty('currentUser');
+        expect(res.body).toHaveProperty('tokens');
+      });
+  });
 
   afterAll(() => {
-    app.close()
-  })
+    app.close();
+  });
 });

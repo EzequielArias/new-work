@@ -1,6 +1,5 @@
-export interface PersonData  {
-    image : string,
-    id : string,
-    name : string
+export interface PersonData {
+  image: string;
+  id: string;
+  name: string;
 }
-

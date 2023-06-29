@@ -15,6 +15,7 @@ import { AtGuard } from 'src/common/guards';
 import { verify } from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
 import { VerifyTokenPayload } from './types';
+import { GetCurrentEmail } from 'src/common/decorators/get-current-email-decorator';
 
 @Controller('account')
 export class AccountController {
@@ -46,16 +47,10 @@ export class AccountController {
     this.account.logout(userId);
   }
 
+  @Public()
   @Post('verify-account')
   @HttpCode(HttpStatus.OK)
-  verifyAccount(req: Request) {
-    const token: string = req.headers['authorization']
-      .replace('Bearer', '')
-      .trim();
-    const data = verify(
-      token,
-      this.config.get('VT-SECRET'),
-    ) as VerifyTokenPayload;
-    this.account.verifyAccount(data.sub);
+  verifyAccount(@GetCurrentEmail() userId : string) {
+    this.account.verifyAccount(userId);
   }
 }

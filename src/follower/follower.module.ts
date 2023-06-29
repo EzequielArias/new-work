@@ -5,6 +5,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Module({
   controllers: [FollowerController],
-  providers: [FollowerService, PrismaService]
+  providers: [FollowerService, PrismaService],
 })
 export class FollowerModule {}
