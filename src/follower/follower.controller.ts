@@ -1,43 +1,45 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { FollowerService } from './follower.service';
 import { PersonData } from './types';
-import { ConfigService } from '@nestjs/config';
-import { verify } from 'jsonwebtoken';
-import { VerifyTokenPayload } from 'src/account/types/Token';
-import { Public } from 'src/common/decorators';
+import { GetCurrentUserId } from 'src/common/decorators';
 
 @Controller('follower')
 export class FollowerController {
-  constructor(
-    private FollowerService: FollowerService,
-    private config: ConfigService,
-  ) {}
+  constructor(private FollowerService: FollowerService) {}
 
-  @Public()
   @Post('follow')
-  follow(@Body() personData: PersonData, req: Request) {
-    console.log(req.headers)
-    const token: string = req.headers['authorization']
-      .replace('Bearer', '')
-      .trim();
-    const data = verify(
-      token,
-      this.config.get('VT-SECRET'),
-    ) as VerifyTokenPayload;
-
-    this.FollowerService.follow(data.sub, personData.id);
+  follow(
+    @Body() personData: PersonData,
+    @GetCurrentUserId() userId: string,
+  ): void {
+    this.FollowerService.follow(userId, personData.id);
   }
 
   @Post('unfollow')
-  unfollow(@Body() personData: PersonData, req: Request){
-    const token: string = req.headers['authorization']
-      .replace('Bearer', '')
-      .trim();
-    const data = verify(
-      token,
-      this.config.get('VT-SECRET'),
-    ) as VerifyTokenPayload;
-
+  unfollow(
+    @Body() personData: PersonData,
+    @GetCurrentUserId() userId: string,
+  ): void {
     this.FollowerService.unfollow(personData.id);
+  }
+
+  @Post('get-followers')
+  getAllFollowers(@GetCurrentUserId() currentUserId: string) {
+    return this.FollowerService.getAllFollowers(currentUserId);
+  }
+
+  @Post('get-following')
+  getAllFollowing(@GetCurrentUserId() currentUserId: string) {
+    return this.FollowerService.getAllFollowing(currentUserId);
+  }
+
+  @Get('get-data-followers')
+  getFollowersData(@GetCurrentUserId() currentUserId: string) {
+    return this.FollowerService.getFollowersData(currentUserId);
+  }
+
+  @Get('get-data-following')
+  getFollowingData(@GetCurrentUserId() currenUserId: string) {
+    return this.FollowerService.getFollowingData(currenUserId);
   }
 }

@@ -50,7 +50,7 @@ export class AccountController {
   @Public()
   @Post('verify-account')
   @HttpCode(HttpStatus.OK)
-  verifyAccount(@GetCurrentEmail() userId : string) {
+  verifyAccount(@GetCurrentEmail() userId: string) {
     this.account.verifyAccount(userId);
   }
 }

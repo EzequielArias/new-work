@@ -24,19 +24,25 @@ export class AtGuard extends AuthGuard('jwt') {
       context.getClass(),
     ]);
 
-    if (isAdmin) {
-      const jwtToken: string = request.headers['authorization']
-        .replace('Bearer', '')
-        .trim();
+    let jwtToken: string;
 
+    if (isPublic) return true;
+
+    if (isAdmin) {
+      jwtToken = request.headers['authorization'].replace('Bearer', '').trim();
       const payload = verify(jwtToken, 'at') as HeadersJwt;
 
       if (payload.rol === 'admin') return true;
       return false;
     }
 
-    if (isPublic) return true;
+    jwtToken = request.headers['authorization'].replace('Bearer', '').trim();
 
-    return super.canActivate(context);
+    const decoded = verify(jwtToken, 'at'); // Reemplaza 'yourSecretKey' con tu clave secreta utilizada para firmar el token
+    const expirationDate = new Date(decoded['exp'] * 1000); // La fecha de expiración está en segundos, por lo que se multiplica por 1000 para convertirla en milisegundos
+    const currentDate = new Date();
+
+    if (expirationDate > currentDate) return true;
+    return false;
   }
 }
