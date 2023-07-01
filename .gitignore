@@ -1,5 +1,8 @@
-# Created by https://www.toptal.com/developers/gitignore/api/yarn,node,expressionengine
-# Edit at https://www.toptal.com/developers/gitignore?templates=yarn,node,expressionengine
+# Created by https://www.toptal.com/developers/gitignore/api/dotenv,node,expressionengine
+# Edit at https://www.toptal.com/developers/gitignore?templates=dotenv,node,expressionengine
+
+### dotenv ###
+.env
 
 ### ExpressionEngine ###
 .DS_Store
@@ -98,7 +101,6 @@ web_modules/
 .yarn-integrity
 
 # dotenv environment variable files
-.env
 .env.development.local
 .env.test.local
 .env.production.local
@@ -162,21 +164,4 @@ dist
 # SvelteKit build / generate output
 .svelte-kit
 
-### yarn ###
-# https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
-
-.yarn/*
-!.yarn/releases
-!.yarn/patches
-!.yarn/plugins
-!.yarn/sdks
-!.yarn/versions
-
-# if you are NOT using Zero-installs, then:
-# comment the following lines
-!.yarn/cache
-
-# and uncomment the following lines
-# .pnp.*
-
-# End of https://www.toptal.com/developers/gitignore/api/yarn,node,expressionengine
+# End of https://www.toptal.com/developers/gitignore/api/dotenv,node,expressionengine

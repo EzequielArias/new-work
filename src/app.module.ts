@@ -6,6 +6,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AtGuard } from './common/guards';
 import { FollowerModule } from './follower/follower.module';
+import { PostsModule } from './posts/posts.module';
 
 @Global()
 @Module({
@@ -15,6 +16,7 @@ import { FollowerModule } from './follower/follower.module';
     PrismaModule,
     ConfigModule.forRoot({ isGlobal: true }),
     FollowerModule,
+    PostsModule,
   ],
   providers: [
     {

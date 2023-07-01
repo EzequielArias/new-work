@@ -42,6 +42,7 @@ model Posts {
   account     Account   @relation(fields: [accountId], references: [id])
   accountId   String
   comment     Comment[]
+  isDeleted   Boolean @default(false)
 }
 
 model Comment {
