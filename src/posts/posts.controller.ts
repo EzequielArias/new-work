@@ -1,4 +1,13 @@
-import { Controller, Body, Get, Query, HttpCode, HttpStatus, Post, Param } from '@nestjs/common';
+import {
+  Controller,
+  Body,
+  Get,
+  Query,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Param,
+} from '@nestjs/common';
 import { GetCurrentUserId, Public } from 'src/common/decorators';
 import { PostDto, EditPostDto } from './dto';
 import { PostsService } from './posts.service';
@@ -10,14 +19,14 @@ export class PostsController {
   @Public()
   @Get('get')
   @HttpCode(HttpStatus.OK)
-  getPosts(@Query('offset') offset : number, @Query('limit') limit : number){
-    return this.posts.getPosts(offset, limit)
+  getPosts(@Query('offset') offset: number, @Query('limit') limit: number) {
+    return this.posts.getPosts(offset, limit);
   }
 
   @Get('get-by-id')
   @HttpCode(HttpStatus.OK)
-  getPostById(@Param('id') postId : string){
-    return this.posts.getPostById(postId)
+  getPostById(@Param('id') postId: string) {
+    return this.posts.getPostById(postId);
   }
 
   @Post('upload')

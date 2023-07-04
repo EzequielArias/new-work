@@ -48,6 +48,7 @@ model Posts {
 model Comment {
   id   String @id @default(uuid())
   text String
+  isDeleted Boolean @default(false)
 
   account   Account @relation(fields: [accountId], references: [id])
   accountId String

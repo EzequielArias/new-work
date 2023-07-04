@@ -7,6 +7,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AtGuard } from './common/guards';
 import { FollowerModule } from './follower/follower.module';
 import { PostsModule } from './posts/posts.module';
+import { CommentModule } from './comment/comment.module';
 
 @Global()
 @Module({
@@ -17,6 +18,7 @@ import { PostsModule } from './posts/posts.module';
     ConfigModule.forRoot({ isGlobal: true }),
     FollowerModule,
     PostsModule,
+    CommentModule,
   ],
   providers: [
     {

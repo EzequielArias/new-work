@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { EditPostDto, PostDto } from './dto';
 
 @Injectable()
 export class PostsService {
-  constructor(private config: ConfigService, private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) {}
 
   async getPosts(offset: number, limit: number) {
     try {
