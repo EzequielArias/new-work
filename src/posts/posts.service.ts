@@ -5,7 +5,10 @@ import { FirebaseService } from 'src/firebase/firebase.service';
 
 @Injectable()
 export class PostsService {
-  constructor(private prisma: PrismaService, private firebase : FirebaseService) {}
+  constructor(
+    private prisma: PrismaService,
+    private firebase: FirebaseService,
+  ) {}
 
   async getPosts(offset: number, limit: number) {
     try {
@@ -48,16 +51,16 @@ export class PostsService {
         },
       });
 
-      const url = await this.firebase.uploadFiles(dto.images, post.id, true)
+      const url = await this.firebase.uploadFiles(dto.images, post.id, true);
 
       await this.prisma.posts.update({
-        where : {
-          id : post.id
+        where: {
+          id: post.id,
         },
-        data : {
-          images : url
-        }
-      })
+        data: {
+          images: url,
+        },
+      });
 
       return true;
     } catch (error) {
@@ -72,13 +75,13 @@ export class PostsService {
           id: dto.postId,
         },
       });
-      
+
       if (userId !== oldPost.accountId) throw new Error('Credentials invalid');
 
-      let img : any;
-      if(dto.images){
-        await this.firebase.removeFile(oldPost.id, true)
-        img = await this.firebase.uploadFiles(dto.images, oldPost.id, true)
+      let img: any;
+      if (dto.images) {
+        await this.firebase.removeFile(oldPost.id, true);
+        img = await this.firebase.uploadFiles(dto.images, oldPost.id, true);
       }
 
       await this.prisma.posts.update({

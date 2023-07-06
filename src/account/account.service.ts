@@ -21,7 +21,7 @@ export class AccountService {
     private prisma: PrismaService,
     private JwtService: JwtService,
     private config: ConfigService,
-    private firebase : FirebaseService
+    private firebase: FirebaseService,
   ) {}
 
   async updateRt(userId: string, rt: string) {
@@ -135,7 +135,7 @@ export class AccountService {
   ): Promise<{ currentUser: currentUser; tokens: Token }> {
     try {
       const hash = await argon.hash(data.password);
-      
+
       const newUser = await this.prisma.account.create({
         data: {
           name: data.name,
@@ -147,17 +147,21 @@ export class AccountService {
         },
       });
 
-      if(data.image){
-        const url = await this.firebase.uploadFiles(data.image, newUser.id, false);
+      if (data.image) {
+        const url = await this.firebase.uploadFiles(
+          data.image,
+          newUser.id,
+          false,
+        );
 
         await this.prisma.account.update({
-          where : {
-            id : newUser.id
+          where: {
+            id: newUser.id,
           },
-          data : {
-            image : url
-          }
-        })
+          data: {
+            image: url,
+          },
+        });
       }
 
       const tokens = await this.getToken(newUser.id, newUser.email);
@@ -222,5 +226,4 @@ export class AccountService {
       },
     });
   }
-
 }

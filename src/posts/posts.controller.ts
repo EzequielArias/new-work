@@ -11,7 +11,9 @@ import {
 import { GetCurrentUserId, Public } from 'src/common/decorators';
 import { PostDto, EditPostDto } from './dto';
 import { PostsService } from './posts.service';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Posts')
 @Controller('posts')
 export class PostsController {
   constructor(private posts: PostsService) {}
@@ -23,7 +25,10 @@ export class PostsController {
     return this.posts.getPosts(offset, limit);
   }
 
-  @Get('get-by-id')
+  @ApiParam({
+    name : 'id'
+  })
+  @Get(':id')
   @HttpCode(HttpStatus.OK)
   getPostById(@Param('id') postId: string) {
     return this.posts.getPostById(postId);

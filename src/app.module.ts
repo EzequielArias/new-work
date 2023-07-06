@@ -22,9 +22,9 @@ import { MulterModule } from '@nestjs/platform-express';
     PostsModule,
     CommentModule,
     FirebaseModule,
-    MulterModule.register({ 
-      dest : './uploads'
-    })
+    MulterModule.register({
+      dest: './uploads',
+    }),
   ],
   providers: [
     {

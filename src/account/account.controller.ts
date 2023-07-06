@@ -19,10 +19,15 @@ import { GetCurrentEmail } from 'src/common/decorators/get-current-email-decorat
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
 import { FirebaseService } from 'src/firebase/firebase.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Accounts')
 @Controller('account')
 export class AccountController {
-  constructor(private account: AccountService, private firebase : FirebaseService) {}
+  constructor(
+    private account: AccountService,
+    private firebase: FirebaseService,
+  ) {}
 
   @Public()
   @Post('signup')

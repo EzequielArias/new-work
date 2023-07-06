@@ -2,7 +2,9 @@ import { Body, Controller, Get, Post } from '@nestjs/common';
 import { FollowerService } from './follower.service';
 import { PersonData } from './types';
 import { GetCurrentUserId } from 'src/common/decorators';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('followers')
 @Controller('follower')
 export class FollowerController {
   constructor(private FollowerService: FollowerService) {}

@@ -10,7 +10,9 @@ import {
 import { rolDto } from './dto';
 import { RolService } from './rol.service';
 import { Admin, Public } from 'src/common/decorators';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Rol')
 @Controller('rol')
 export class RolController {
   constructor(private rol: RolService) {}
