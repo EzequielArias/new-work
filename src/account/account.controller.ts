@@ -5,21 +5,24 @@ import {
   HttpStatus,
   Post,
   Request,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AccountDto, AccountSignInDto } from './dto';
 import { AccountService } from './account.service';
 import { Public } from 'src/common/decorators/public.decorator';
 import { GetCurrentUserId } from 'src/common/decorators/get-current-user-id-decorator';
 import { AtGuard } from 'src/common/guards';
-import { verify } from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
-import { VerifyTokenPayload } from './types';
 import { GetCurrentEmail } from 'src/common/decorators/get-current-email-decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Express } from 'express';
+import { FirebaseService } from 'src/firebase/firebase.service';
 
 @Controller('account')
 export class AccountController {
-  constructor(private account: AccountService, private config: ConfigService) {}
+  constructor(private account: AccountService, private firebase : FirebaseService) {}
 
   @Public()
   @Post('signup')

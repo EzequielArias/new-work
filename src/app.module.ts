@@ -8,6 +8,8 @@ import { AtGuard } from './common/guards';
 import { FollowerModule } from './follower/follower.module';
 import { PostsModule } from './posts/posts.module';
 import { CommentModule } from './comment/comment.module';
+import { FirebaseModule } from './firebase/firebase.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Global()
 @Module({
@@ -19,6 +21,10 @@ import { CommentModule } from './comment/comment.module';
     FollowerModule,
     PostsModule,
     CommentModule,
+    FirebaseModule,
+    MulterModule.register({ 
+      dest : './uploads'
+    })
   ],
   providers: [
     {
