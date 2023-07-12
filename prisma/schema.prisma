@@ -19,7 +19,7 @@ model Type_rol {
 model Account {
   id          String           @id @default(uuid())
   name        String           @db.VarChar(50)
-  image       String           @db.VarChar(255)
+  image       String?           @db.VarChar(255)
   email       String           @unique @db.VarChar(100)
   isDeleted   Boolean          @default(false)
   type_rol    Type_rol         @relation(fields: [Type_rol_id], references: [id]) //Belongs to a Type_rol
@@ -29,8 +29,9 @@ model Account {
   isVerified  Boolean          @default(false)
   posts       Posts[]
   comments    Comment[]
-  followers   Follower[]
-  following   Following[]
+  followers Follower[] @relation("FollowerId")
+
+  following Follower[] @relation("FollowingId")
   academic    Academic[]
   workplace   WorkExperience[]
 }
@@ -58,17 +59,13 @@ model Comment {
 }
 
 model Follower {
-  id        String   @id @default(uuid())
-  Account   Account? @relation(fields: [accountId], references: [id])
-  accountId String?
-  personId String
-}
+  FollowerId Account @relation(fields: [follower_id], references: [id], name: "FollowerId")
+  FollowingId Account @relation(fields: [following_id], references: [id], name: "FollowingId")
 
-model Following {
-  id        String   @id @default(uuid())
-  Account   Account? @relation(fields: [accountId], references: [id])
-  accountId String?
-  personId String
+  follower_id String
+  following_id  String
+
+  @@id([follower_id,following_id])
 }
 
 model Academic {

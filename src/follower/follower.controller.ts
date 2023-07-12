@@ -22,26 +22,11 @@ export class FollowerController {
     @Body() personData: PersonData,
     @GetCurrentUserId() userId: string,
   ): void {
-    this.FollowerService.unfollow(personData.id);
-  }
-
-  @Post('get-followers')
-  getAllFollowers(@GetCurrentUserId() currentUserId: string) {
-    return this.FollowerService.getAllFollowers(currentUserId);
-  }
-
-  @Post('get-following')
-  getAllFollowing(@GetCurrentUserId() currentUserId: string) {
-    return this.FollowerService.getAllFollowing(currentUserId);
+    this.FollowerService.unfollow(userId, personData.id);
   }
 
   @Get('get-data-followers')
   getFollowersData(@GetCurrentUserId() currentUserId: string) {
     return this.FollowerService.getFollowersData(currentUserId);
-  }
-
-  @Get('get-data-following')
-  getFollowingData(@GetCurrentUserId() currenUserId: string) {
-    return this.FollowerService.getFollowingData(currenUserId);
   }
 }
