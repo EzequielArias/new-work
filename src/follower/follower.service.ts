@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class FollowerService {
@@ -55,19 +55,19 @@ export class FollowerService {
           },
         },
       });
-      
+
       const following = await this.prisma.follower.findMany({
         where: {
           following_id: currentUserId,
         },
         include: {
           FollowingId: {
-            select : {
+            select: {
               id: true,
               image: true,
               name: true,
-            }
-          }
+            },
+          },
         },
       });
 

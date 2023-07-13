@@ -7,17 +7,13 @@ export class AccountDto {
   @IsNotEmpty()
   name: string;
   @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  image: string;
+  image?: Express.Multer.File;
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
   email: string;
   @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  Type_rol_id: string;
+  Type_rol_id?: string;
   @ApiProperty()
   @IsString()
   @IsStrongPassword()

@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { rolDto } from './dto';
 import { RolService } from './rol.service';
-import { Admin, Public } from 'src/common/decorators';
+import { Admin, Public } from '../common/decorators';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Rol')

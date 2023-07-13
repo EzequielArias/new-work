@@ -8,7 +8,7 @@ import {
   Post,
   Param,
 } from '@nestjs/common';
-import { GetCurrentUserId, Public } from 'src/common/decorators';
+import { GetCurrentUserId, Public } from '../common/decorators';
 import { PostDto, EditPostDto } from './dto';
 import { PostsService } from './posts.service';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
@@ -26,7 +26,7 @@ export class PostsController {
   }
 
   @ApiParam({
-    name : 'id'
+    name: 'id',
   })
   @Get(':id')
   @HttpCode(HttpStatus.OK)

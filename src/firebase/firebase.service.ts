@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { firebase_config } from 'firebase.config';
+import { firebase_config } from '../../firebase.config';
 import { FirebaseApp, initializeApp } from 'firebase/app';
 import {
   FirebaseStorage,

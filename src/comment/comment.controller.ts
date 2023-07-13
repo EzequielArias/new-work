@@ -9,7 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { CommentService } from './comment.service';
-import { GetCurrentUserId } from 'src/common/decorators';
+import { GetCurrentUserId } from '../common/decorators';
 import { CommentDto, editCommentDto } from './dto';
 import { ApiTags } from '@nestjs/swagger';
 

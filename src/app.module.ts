@@ -14,9 +14,9 @@ import { MulterModule } from '@nestjs/platform-express';
 @Global()
 @Module({
   imports: [
-    RolModule,
-    AccountModule,
     PrismaModule,
+    AccountModule,
+    RolModule,
     ConfigModule.forRoot({ isGlobal: true }),
     FollowerModule,
     PostsModule,

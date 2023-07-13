@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { ForbiddenException, Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
 import { AccountDto } from './dto';
 import { JwtService } from '@nestjs/jwt';
 import * as argon from 'argon2';
@@ -13,7 +13,8 @@ import {
 } from './types';
 import * as nodemailer from 'nodemailer';
 import * as nodemailer_sendgrind from 'nodemailer-sendgrid';
-import { FirebaseService } from 'src/firebase/firebase.service';
+import { FirebaseService } from '../firebase/firebase.service';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 
 @Injectable()
 export class AccountService {
@@ -55,7 +56,7 @@ export class AccountService {
     const [at, rt] = await Promise.all([
       this.JwtService.signAsync(jwtPayload, {
         secret: this.config.get('AT-SECRET'),
-        expiresIn: '15m',
+        expiresIn: '1h',
       }),
 
       this.JwtService.signAsync(jwtPayload, {
@@ -98,7 +99,104 @@ export class AccountService {
       // I have to colocate this token in a URL
       let token: VerifyToken = await this.verifyToken(userId, email);
 
-      const HTMLtemplate = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet"><title>Document</title><style>*{box-sizing:border-box;margin:0}div{display:flex;flex-direction:column;align-items:center;justify-content:center;color:black;background-color:azure;height:85vh}img{height:90px;width:90px;margin-bottom:50px}p{text-align:center;margin-bottom:1em;font-family:'Roboto',sans-serif}button{padding:1em;font-size:1em}a{text-decoration:none;color:black}footer{height:15vh;background-color:cadetblue}.p-pd{margin-top:10px;font-size:.7em}footer{color:white;text-align:center}footer a{color:white}footer a:hover{color:black;}</style></head><body><div><img src="../assets/emailCheck.png" alt="emailCheck" /><p>Haz click en el boton para verificar tu cuenta de email!</p><button><a href="localhost:8080/verify-account">Click me</a></button><p class="p-pd">El boton solo es valido durante 15 minutos</p></div><footer><p>This website was made by <a href="" id="btn">Ezequiel Arias</a></p></footer><script>const btn=document.getElementById('btn');btn.addEventListener('click',()=>{fetch('http://localhost:8080/verify-account',{method:'POST',headers:{'Authorization':'${token}'}}).then(res=>res.json()).catch(err=>console.log(err))})</script></body></html>`;
+      const HTMLtemplate = `<!DOCTYPE html>
+      <html lang="en">
+      
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+          <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+          <title>Document</title>
+          <style>
+              * {
+                  box-sizing: border-box;
+                  margin: 0
+              }
+      
+              div {
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  justify-content: center;
+                  color: black;
+                  background-color: azure;
+                  height: 85vh
+              }
+      
+              img {
+                  height: 90px;
+                  width: 90px;
+                  margin-bottom: 50px
+              }
+      
+              p {
+                  text-align: center;
+                  margin-bottom: 1em;
+                  font-family: 'Roboto', sans-serif
+              }
+      
+              button {
+                  padding: 1em;
+                  font-size: 1em
+              }
+      
+              a {
+                  text-decoration: none;
+                  color: black
+              }
+      
+              footer {
+                  height: 15vh;
+                  background-color: cadetblue
+              }
+      
+              .p-pd {
+                  margin-top: 10px;
+                  font-size: .7em
+              }
+      
+              footer {
+                  color: white;
+                  text-align: center
+              }
+      
+              footer a {
+                  color: white
+              } 
+      
+              footer a:hover {
+                  color: black;
+              }
+      
+          </style>
+      </head>
+      
+      <body>
+          <div><img src="../assets/emailCheck.png" alt="emailCheck" />
+              <p>Haz click en el boton para verificar tu cuenta de email!</p><button><a href="localhost:8080/verify-account">Click me</a></button>
+              <p class="p-pd">El boton solo es valido durante 15 minutos</p>
+          </div>
+          <footer>
+              <p>This website was made by <a href="" id="btn">Ezequiel Arias</a></p>
+          </footer>
+          <script>
+              const btn = document.getElementById('btn');
+              btn.addEventListener('click', () => {
+                  fetch('http://localhost:8080/verify-account',{
+                      method : 'POST',
+                      headers : {
+                          'Authorization' : '${token}'
+                      }
+                  })
+                  .then(res => res.json())
+                  .catch(err => console.log(err))
+              })
+          </script>
+      </body>
+      
+      </html>`
 
       const transport = nodemailer.createTransport(
         nodemailer_sendgrind({
@@ -132,18 +230,20 @@ export class AccountService {
 
   async signup(
     data: AccountDto,
-  ): Promise<{ currentUser: currentUser; tokens: Token }> {
+  ): Promise<Error | { tokens: Token; currentUser: currentUser }> {
     try {
       const hash = await argon.hash(data.password);
 
       const newUser = await this.prisma.account.create({
         data: {
           name: data.name,
-          image: data.image,
+          image:
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS45h4o2Zz779xVIm5pSrxTSwTAKViflqRQXF9NYJpjrxl7u0wgYwZi-usOt_EMM64GH9c&usqp=CAU',
           email: data.email,
-          followers: {}, // Proximamente
-          Type_rol_id: data.Type_rol_id,
           password: hash,
+          Type_rol_id: data.Type_rol_id
+            ? data.Type_rol_id
+            : 'a58d43b9-afb9-4b73-8e08-ac82b8b716bb',
         },
       });
 
@@ -181,11 +281,20 @@ export class AccountService {
         tokens,
       };
     } catch (error) {
-      console.log(error);
+      if (error instanceof PrismaClientKnownRequestError)
+        throw new PrismaClientKnownRequestError(
+          'Ese email ya esta registrado',
+          { code: 'P1000', clientVersion: '1.0.0' },
+        );
+
+      throw new Error(error.message);
     }
   }
 
-  async signin(email: string, pass: string) {
+  async signin(
+    email: string,
+    pass: string,
+  ): Promise<Error | { tokens: Token; currentUser: currentUser }> {
     try {
       const user = await this.prisma.account.findUnique({
         where: {
@@ -193,11 +302,13 @@ export class AccountService {
         },
       });
 
-      if (!user) throw new Error('Email o contraseña son invalidos');
+      if (!user)
+        throw new ForbiddenException('Email o contraseña son invalidos');
 
       const verify = await argon.verify(user.password, pass);
 
-      if (!verify) throw new Error('Email o contraseña son invalidos');
+      if (!verify)
+        throw new ForbiddenException('Email o contraseña son invalidos');
 
       const tokens = await this.getToken(user.id, user.email);
       await this.updateRt(user.id, tokens.refresh_token);
@@ -211,8 +322,11 @@ export class AccountService {
         currentUser,
         tokens,
       };
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      if (error instanceof ForbiddenException)
+        throw new ForbiddenException(error.message);
+
+      throw new Error(error.message);
     }
   }
 

@@ -13,7 +13,7 @@ datasource db {
 model Type_rol {
   id       String    @id @default(uuid())
   rol      String    @unique
-  accounts Account[] // HasMany accounts
+  accounts Account[] 
 }
 
 model Account {
@@ -23,7 +23,7 @@ model Account {
   email       String           @unique @db.VarChar(100)
   isDeleted   Boolean          @default(false)
   type_rol    Type_rol         @relation(fields: [Type_rol_id], references: [id]) //Belongs to a Type_rol
-  Type_rol_id String           @default("367546e4-0444-4bd6-8837-f491f65b8ca1") // I have to change this iD
+  Type_rol_id String           @default("a58d43b9-afb9-4b73-8e08-ac82b8b716bb") 
   password    String      
   rt_hash     String           @default("")
   isVerified  Boolean          @default(false)

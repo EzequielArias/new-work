@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { FollowerService } from './follower.service';
 import { PersonData } from './types';
-import { GetCurrentUserId } from 'src/common/decorators';
+import { GetCurrentUserId } from '../common/decorators';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('followers')

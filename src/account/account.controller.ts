@@ -11,41 +11,45 @@ import {
 } from '@nestjs/common';
 import { AccountDto, AccountSignInDto } from './dto';
 import { AccountService } from './account.service';
-import { Public } from 'src/common/decorators/public.decorator';
-import { GetCurrentUserId } from 'src/common/decorators/get-current-user-id-decorator';
-import { AtGuard } from 'src/common/guards';
-import { ConfigService } from '@nestjs/config';
-import { GetCurrentEmail } from 'src/common/decorators/get-current-email-decorator';
+import { Public } from '../common/decorators';
+import { GetCurrentUserId } from '../common/decorators/get-current-user-id-decorator';
+import { AtGuard } from '../common/guards';
+import { GetCurrentEmail } from '../common/decorators';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Express } from 'express';
-import { FirebaseService } from 'src/firebase/firebase.service';
 import { ApiTags } from '@nestjs/swagger';
+import { Token, currentUser } from './types';
 
 @ApiTags('Accounts')
 @Controller('account')
 export class AccountController {
-  constructor(
-    private account: AccountService,
-    private firebase: FirebaseService,
-  ) {}
+  constructor(private account: AccountService) {}
 
   @Public()
   @Post('signup')
+  @UseInterceptors(FileInterceptor('file'))
   @HttpCode(HttpStatus.CREATED)
-  signup(@Body() dto: AccountDto) {
+  signup(@Body() dto: AccountDto, @UploadedFile() file: Express.Multer.File) {
     try {
+      if (file) dto.image = file;
+
       const result = this.account.signup(dto);
       return result;
     } catch (error) {
-      console.log(error);
+      throw new Error(error.message);
     }
   }
 
   @Public()
   @Post('signin')
   @HttpCode(HttpStatus.OK)
-  signin(@Body() dto: AccountSignInDto) {
-    return this.account.signin(dto.email, dto.password);
+  signin(
+    @Body() dto: AccountSignInDto,
+  ): Promise<Error | { tokens: Token; currentUser: currentUser }> {
+    try {
+      return this.account.signin(dto.email, dto.password);
+    } catch (e: any) {
+      throw new Error(e.message);
+    }
   }
 
   @Post('logout')
@@ -59,6 +63,10 @@ export class AccountController {
   @Post('verify-account')
   @HttpCode(HttpStatus.OK)
   verifyAccount(@GetCurrentEmail() userId: string) {
-    this.account.verifyAccount(userId);
+    try {
+      return this.account.verifyAccount(userId);
+    } catch (error) {
+      throw new Error(error.message);
+    }
   }
 }
