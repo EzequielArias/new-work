@@ -73,6 +73,7 @@ model Academic {
   institution String?
   start       DateTime
   end         DateTime
+  description String
   Account     Account? @relation(fields: [accountId], references: [id])
   accountId   String?
 }

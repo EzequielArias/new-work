@@ -10,6 +10,8 @@ import { PostsModule } from './posts/posts.module';
 import { CommentModule } from './comment/comment.module';
 import { FirebaseModule } from './firebase/firebase.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { AcademicModule } from './academic/academic.module';
+import { WorkexperienceModule } from './workexperience/workexperience.module';
 
 @Global()
 @Module({
@@ -25,6 +27,8 @@ import { MulterModule } from '@nestjs/platform-express';
     MulterModule.register({
       dest: './uploads',
     }),
+    AcademicModule,
+    WorkexperienceModule,
   ],
   providers: [
     {

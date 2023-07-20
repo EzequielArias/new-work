@@ -196,7 +196,7 @@ export class AccountService {
           </script>
       </body>
       
-      </html>`
+      </html>`;
 
       const transport = nodemailer.createTransport(
         nodemailer_sendgrind({

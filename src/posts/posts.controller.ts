@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Post,
   Param,
+  Put,
 } from '@nestjs/common';
 import { GetCurrentUserId, Public } from '../common/decorators';
 import { PostDto, EditPostDto } from './dto';
@@ -40,9 +41,9 @@ export class PostsController {
     this.posts.uploadPost(userId, dto);
   }
 
-  @Post('edit')
+  @Put('edit/:id')
   @HttpCode(HttpStatus.OK)
-  editPost(@GetCurrentUserId() userId: string, @Body() dto: EditPostDto) {
-    this.posts.editPost(userId, dto);
+  editPost(@GetCurrentUserId() userId: string, @Body() dto: EditPostDto, @Param('id') postId : string) {
+    this.posts.editPost(userId, dto, postId);
   }
 }

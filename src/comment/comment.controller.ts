@@ -38,7 +38,7 @@ export class CommentController {
     this.comment.uploadComment(currentUserId, postId, dto);
   }
 
-  @Put('edit')
+  @Put('edit/:id')
   @HttpCode(HttpStatus.OK)
   editComment(
     @GetCurrentUserId() currentUserId: string,
