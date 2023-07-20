@@ -4,6 +4,6 @@ import { WorkexperienceController } from './workexperience.controller';
 
 @Module({
   providers: [WorkexperienceService],
-  controllers: [WorkexperienceController]
+  controllers: [WorkexperienceController],
 })
 export class WorkexperienceModule {}

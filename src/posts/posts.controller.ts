@@ -43,7 +43,11 @@ export class PostsController {
 
   @Put('edit/:id')
   @HttpCode(HttpStatus.OK)
-  editPost(@GetCurrentUserId() userId: string, @Body() dto: EditPostDto, @Param('id') postId : string) {
+  editPost(
+    @GetCurrentUserId() userId: string,
+    @Body() dto: EditPostDto,
+    @Param('id') postId: string,
+  ) {
     this.posts.editPost(userId, dto, postId);
   }
 }

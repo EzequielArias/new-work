@@ -68,7 +68,7 @@ export class PostsService {
     }
   }
 
-  async editPost(userId: string, dto: EditPostDto, postId : string) {
+  async editPost(userId: string, dto: EditPostDto, postId: string) {
     try {
       const oldPost = await this.prisma.posts.findUnique({
         where: {

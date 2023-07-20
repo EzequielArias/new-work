@@ -14,7 +14,8 @@ import {
 import * as nodemailer from 'nodemailer';
 import * as nodemailer_sendgrind from 'nodemailer-sendgrid';
 import { FirebaseService } from '../firebase/firebase.service';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import { CustomErr } from '../utils';
+import { ResponseData } from 'src/interfaces/custom.response';
 
 @Injectable()
 export class AccountService {
@@ -230,7 +231,7 @@ export class AccountService {
 
   async signup(
     data: AccountDto,
-  ): Promise<Error | { tokens: Token; currentUser: currentUser }> {
+  ): Promise<ResponseData<any> | { tokens: Token; currentUser: currentUser }> {
     try {
       const hash = await argon.hash(data.password);
 
@@ -280,21 +281,16 @@ export class AccountService {
         currentUser,
         tokens,
       };
-    } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError)
-        throw new PrismaClientKnownRequestError(
-          'Ese email ya esta registrado',
-          { code: 'P1000', clientVersion: '1.0.0' },
-        );
-
-      throw new Error(error.message);
+    } catch (err: any) {
+      const res = new CustomErr()
+      return res.nestErr(err)
     }
   }
 
   async signin(
     email: string,
     pass: string,
-  ): Promise<Error | { tokens: Token; currentUser: currentUser }> {
+  ): Promise<ResponseData<any> | { tokens: Token; currentUser: currentUser }> {
     try {
       const user = await this.prisma.account.findUnique({
         where: {
@@ -322,11 +318,9 @@ export class AccountService {
         currentUser,
         tokens,
       };
-    } catch (error: any) {
-      if (error instanceof ForbiddenException)
-        throw new ForbiddenException(error.message);
-
-      throw new Error(error.message);
+    } catch (err: any) {
+      const res = new CustomErr()
+      return res.nestErr(err)
     }
   }
 

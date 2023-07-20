@@ -1,21 +1,20 @@
-import { IsDate, IsString } from "class-validator";
+import { IsDate, IsString } from 'class-validator';
 
 export class WorkExperienceDTO {
-    
-    @IsString()
-    id? : string
+  @IsString()
+  id?: string;
 
-    @IsString()
-    description : string
+  @IsString()
+  description: string;
 
-    @IsString()
-    rol : string
-    @IsString()
-    workplace : string
+  @IsString()
+  rol: string;
+  @IsString()
+  workplace: string;
 
-    @IsDate()
-    start : Date
+  @IsDate()
+  start: Date;
 
-    @IsDate()
-    end : Date
+  @IsDate()
+  end: Date;
 }

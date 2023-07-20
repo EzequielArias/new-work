@@ -1,1 +1,1 @@
-export * from './academic.types'
+export * from './academic.types';

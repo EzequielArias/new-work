@@ -1,14 +1,13 @@
-import { IsBoolean, IsDate, IsNotEmpty, IsString, Max } from "class-validator";
+import { IsBoolean, IsDate, IsNotEmpty, IsString, Max } from 'class-validator';
 
 export class AcademicDto {
-
   @IsString()
-  id? : string
+  id?: string;
 
   @IsString()
   @IsNotEmpty()
   institution: string;
-  
+
   @IsDate()
   @IsNotEmpty()
   start: Date;
