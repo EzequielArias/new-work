@@ -1,8 +1,6 @@
 import { IsBoolean, IsDate, IsNotEmpty, IsString, Max } from 'class-validator';
 
 export class AcademicDto {
-  @IsString()
-  id?: string;
 
   @IsString()
   @IsNotEmpty()

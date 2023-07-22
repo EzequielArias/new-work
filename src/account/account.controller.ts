@@ -44,7 +44,7 @@ export class AccountController {
   @HttpCode(HttpStatus.OK)
   signin(
     @Body() dto: AccountSignInDto,
-  ): Promise<Error | { tokens: Token; currentUser: currentUser }> {
+  ){
     try {
       return this.account.signin(dto.email, dto.password);
     } catch (e: any) {

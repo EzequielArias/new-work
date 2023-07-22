@@ -12,7 +12,7 @@ export class AcademicService {
   async uploadAcademic(
     userId: string,
     dto: AcademicDto,
-  ): Promise<void | ResponseData<any>> {
+  ): Promise<ResponseData<any>> {
     const date = new Date();
 
     try {
@@ -25,13 +25,19 @@ export class AcademicService {
           description: dto.description,
         },
       });
+
+      return {
+        ok : true,
+        statusCode : 200,
+        payload : 'academic update'
+      }
     } catch (err: any) {
       const res = new CustomErr()
       return res.nestErr(err)
     }
   }
 
-  async getAllAcademics(userId: string): Promise<ResponseData<any> | Academic[]> {
+  async getAllAcademics(userId: string): Promise<ResponseData<any | Academic[]>> {
     try {
       const result = await this.prisma.academic.findMany({
         where: {
@@ -41,18 +47,22 @@ export class AcademicService {
 
       if (!result) throw new Error('No se encontraron coincidencias');
 
-      return result;
+      return {
+        ok : true,
+        statusCode : 200,
+        payload : result
+      };
     } catch (err: any) {
       const res = new CustomErr()
       return res.nestErr(err)
     }
   }
 
-  async updateAcademic(userId: string, dto: AcademicDto) {
+  async updateAcademic(userId: string, dto: AcademicDto, academicId : string) {
     try {
       const validato = await this.prisma.academic.findUnique({
         where: {
-          id: dto.id,
+          id: academicId,
         },
       });
 
@@ -60,7 +70,7 @@ export class AcademicService {
 
       await this.prisma.academic.update({
         where: {
-          id: dto.id,
+          id: academicId,
         },
         data: {
           institution: dto.institution,
@@ -75,7 +85,7 @@ export class AcademicService {
     }
   }
 
-  async removeAcademic(userId: string, academicSlotId: string) {
+  async removeAcademic(userId: string, academicSlotId: string) : Promise<ResponseData<string>>{
     try {
       const validato = await this.prisma.academic.findUnique({
         where: {
@@ -90,6 +100,12 @@ export class AcademicService {
           id: academicSlotId,
         },
       });
+
+      return {
+        ok : true,
+        statusCode : 200,
+        payload : 'academic slot removed succesfully'
+      }
     } catch (err: any) {
       const res = new CustomErr()
       return res.nestErr(err)

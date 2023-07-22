@@ -231,7 +231,7 @@ export class AccountService {
 
   async signup(
     data: AccountDto,
-  ): Promise<ResponseData<any> | { tokens: Token; currentUser: currentUser }> {
+  ): Promise<ResponseData<{ tokens: Token; currentUser: currentUser } | string>> {
     try {
       const hash = await argon.hash(data.password);
 
@@ -278,9 +278,13 @@ export class AccountService {
       };
 
       return {
-        currentUser,
-        tokens,
-      };
+        ok : true,
+        statusCode : 201,
+        payload : {
+          currentUser,
+          tokens,
+        }
+      }
     } catch (err: any) {
       const res = new CustomErr()
       return res.nestErr(err)
@@ -290,7 +294,7 @@ export class AccountService {
   async signin(
     email: string,
     pass: string,
-  ): Promise<ResponseData<any> | { tokens: Token; currentUser: currentUser }> {
+  ): Promise<ResponseData<{ tokens: Token; currentUser: currentUser } | string >> {
     try {
       const user = await this.prisma.account.findUnique({
         where: {
@@ -314,10 +318,14 @@ export class AccountService {
         email: user.email,
       };
 
-      return {
-        currentUser,
-        tokens,
-      };
+      return  {
+        ok : true,
+        statusCode : 200,
+        payload : {
+          currentUser,
+          tokens,
+        }
+      }
     } catch (err: any) {
       const res = new CustomErr()
       return res.nestErr(err)

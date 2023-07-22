@@ -35,7 +35,7 @@ export class CommentController {
     @Body() postId: string,
     @Body() dto: CommentDto,
   ) {
-    this.comment.uploadComment(currentUserId, postId, dto);
+    return this.comment.uploadComment(currentUserId, postId, dto);
   }
 
   @Put('edit/:id')
@@ -44,7 +44,7 @@ export class CommentController {
     @GetCurrentUserId() currentUserId: string,
     @Body() edit: editCommentDto,
   ) {
-    this.comment.editComment(currentUserId, edit.id, edit);
+    return this.comment.editComment(currentUserId, edit.id, edit);
   }
 
   @Put('remove')
@@ -53,6 +53,6 @@ export class CommentController {
     @GetCurrentUserId() currentUserId: string,
     @Body() commentId: string,
   ) {
-    this.comment.removeComment(currentUserId, commentId);
+    return this.comment.removeComment(currentUserId, commentId);
   }
 }

@@ -13,16 +13,16 @@ export class FollowerController {
   follow(
     @Body() personData: PersonData,
     @GetCurrentUserId() userId: string,
-  ): void {
-    this.FollowerService.follow(userId, personData.id);
+  ) {
+    return this.FollowerService.follow(userId, personData.id);
   }
 
   @Post('unfollow')
   unfollow(
     @Body() personData: PersonData,
     @GetCurrentUserId() userId: string,
-  ): void {
-    this.FollowerService.unfollow(userId, personData.id);
+  ) {
+    return this.FollowerService.unfollow(userId, personData.id);
   }
 
   @Get('get-data-followers')

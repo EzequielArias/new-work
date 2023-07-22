@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Get, Put, Delete } from '@nestjs/common';
+import { Body, Controller, Post, Get, Put, Delete, Param } from '@nestjs/common';
 import { GetCurrentUserId } from '../common/decorators';
 import { AcademicDto } from './dto';
 import { AcademicService } from './academic.service';
@@ -11,7 +11,7 @@ export class AcademicController {
 
   @Post('add')
   uploadAcademic(@GetCurrentUserId() userId: string, @Body() dto: AcademicDto) {
-    this.academic.uploadAcademic(userId, dto);
+    return this.academic.uploadAcademic(userId, dto);
   }
 
   @Get('getAll')
@@ -19,16 +19,19 @@ export class AcademicController {
     return this.academic.getAllAcademics(userId);
   }
 
-  @Put('update')
-  updateAcademic(@GetCurrentUserId() userId: string, @Body() dto: AcademicDto) {
-    this.academic.updateAcademic(userId, dto);
+  @Put('update/:id')
+  updateAcademic(
+   @GetCurrentUserId() userId: string
+  ,@Body() dto: AcademicDto
+  ,@Param('id') academicId : string) {
+    return this.academic.updateAcademic(userId, dto, academicId);
   }
 
-  @Delete('remove')
+  @Delete('remove/:id')
   removeAcademic(
     @GetCurrentUserId() userId: string,
-    @Body() academicSlotId: string,
+    @Param('id') academicSlotId: string,
   ) {
-    this.academic.removeAcademic(userId, academicSlotId);
+    return this.academic.removeAcademic(userId, academicSlotId);
   }
 }

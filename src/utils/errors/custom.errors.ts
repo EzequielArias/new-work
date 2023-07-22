@@ -28,6 +28,7 @@ import {
   PrismaClientValidationError,
 } from '@prisma/client/runtime';
 
+
 import { ResponseData } from 'src/interfaces/custom.response';
 
 export class CustomErr {

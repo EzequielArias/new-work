@@ -2,12 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CommentDto } from './dto';
 import { CommentShape } from './types';
+import { CustomErr } from 'src/utils/errors/custom.errors';
+import { ResponseData } from 'src/interfaces/custom.response';
 
 @Injectable()
 export class CommentService {
   constructor(private prisma: PrismaService) {}
 
-  async uploadComment(currentUserId: string, postId: string, dto: CommentDto) {
+  async uploadComment(currentUserId: string, postId: string, dto: CommentDto) : Promise<ResponseData<any>>{
     try {
       if (!currentUserId || !postId) throw new Error('Credentials invalid');
 
@@ -19,13 +21,18 @@ export class CommentService {
         },
       });
 
-      return true;
-    } catch (error) {
-      console.log(error);
+      return {
+        ok :true,
+        statusCode : 200,
+        payload : 'comentario agregado'
+      }
+    } catch (err) {
+      const res = new CustomErr()
+      return res.nestErr(err)
     }
   }
 
-  async editComment(currentUserId: string, commentId: string, dto: CommentDto) {
+  async editComment(currentUserId: string, commentId: string, dto: CommentDto) : Promise<ResponseData<any>> {
     try {
       const comment = await this.getCommentById(currentUserId);
 
@@ -40,8 +47,15 @@ export class CommentService {
           text: dto.text,
         },
       });
-    } catch (error) {
-      console.log(error);
+
+      return {
+        ok : true,
+        statusCode : 200,
+        payload : 'comentario editado'
+      }
+    } catch (err) {
+      const res = new CustomErr()
+      return res.nestErr(err)
     }
   }
 
@@ -54,7 +68,7 @@ export class CommentService {
     return comment;
   }
 
-  async removeComment(currentUserId: string, commentId: string) {
+  async removeComment(currentUserId: string, commentId: string) : Promise<ResponseData<any>>{
     try {
       const comment = await this.getCommentById(currentUserId);
 
@@ -69,22 +83,35 @@ export class CommentService {
           isDeleted: true,
         },
       });
-    } catch (error) {
-      console.log(error);
+
+      return {
+        ok : true,
+        statusCode : 200,
+        payload : 'comment removed'
+      }
+
+    } catch (err) {
+      const res = new CustomErr()
+      return res.nestErr(err)
     }
   }
 
-  async getPostComment(postId: string, limit: string, offset: string) {
+  async getPostComment(postId: string, limit: string, offset: string) : Promise<ResponseData<CommentShape | string>>{
     try {
       const sqlCommand = `SELECT * FROM Comment 
             WHERE isDeleted = false AND postsId = ${postId} 
             OFFSET ${offset} LIMIT ${limit}`;
 
-      const comments = await this.prisma.$queryRaw`${sqlCommand}`;
+      const comments : CommentShape = await this.prisma.$queryRaw`${sqlCommand}`;
 
-      return comments;
-    } catch (error) {
-      console.log(error);
+      return {
+        ok : true,
+        statusCode : 200,
+        payload : comments
+      };
+    } catch (err) {
+      const res = new CustomErr()
+      return res.nestErr(err)
     }
   }
 }
