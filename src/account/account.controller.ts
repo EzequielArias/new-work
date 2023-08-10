@@ -33,6 +33,7 @@ export class AccountController {
       if (file) dto.image = file;
 
       const result = this.account.signup(dto);
+
       return result;
     } catch (error) {
       throw new Error(error.message);

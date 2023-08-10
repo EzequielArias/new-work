@@ -211,7 +211,9 @@ export class AccountService {
         subject: 'Email de verificacion',
         html: HTMLtemplate,
       });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   async verifyAccount(userId: string) {
@@ -287,7 +289,8 @@ export class AccountService {
       }
     } catch (err: any) {
       const res = new CustomErr()
-      return res.nestErr(err)
+      console.log(res.nestErr(err))
+      throw res.nestErr(err)
     }
   }
 
