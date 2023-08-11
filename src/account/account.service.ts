@@ -47,7 +47,8 @@ export class AccountService {
         type_rol: true,
       },
     });
-
+  console.log(this.config.get('AT-SECRET))
+  console.log(this.config.get('RT-SECRET'))
     const jwtPayload: JwtPayload = {
       sub: userId,
       email,
