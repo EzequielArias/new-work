@@ -246,7 +246,7 @@ export class AccountService {
           password: hash,
           Type_rol_id: data.Type_rol_id
             ? data.Type_rol_id
-            : 'a58d43b9-afb9-4b73-8e08-ac82b8b716bb',
+            : '7b8a9c10-11d1-80b4-00c04fd430c8',
         },
       });
 
