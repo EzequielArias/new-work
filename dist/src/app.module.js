@@ -29,8 +29,8 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             prisma_module_1.PrismaModule,
             account_module_1.AccountModule,
-            rol_module_1.RolModule,
             config_1.ConfigModule.forRoot({ isGlobal: true }),
+            rol_module_1.RolModule,
             follower_module_1.FollowerModule,
             posts_module_1.PostsModule,
             comment_module_1.CommentModule,

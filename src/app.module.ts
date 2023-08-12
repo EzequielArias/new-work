@@ -18,8 +18,8 @@ import { WorkexperienceModule } from './workexperience/workexperience.module';
   imports: [
     PrismaModule,
     AccountModule,
-    RolModule,
     ConfigModule.forRoot({ isGlobal: true }),
+    RolModule,
     FollowerModule,
     PostsModule,
     CommentModule,

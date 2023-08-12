@@ -47,8 +47,7 @@ export class AccountService {
         type_rol: true,
       },
     });
-  console.log(this.config.get('AT-SECRET'))
-  console.log(this.config.get('RT-SECRET'))
+    
     const jwtPayload: JwtPayload = {
       sub: userId,
       email,
@@ -57,12 +56,12 @@ export class AccountService {
 
     const [at, rt] = await Promise.all([
       this.JwtService.signAsync(jwtPayload, {
-        secret: this.config.get('AT-SECRET'),
+        secret: this.config.get<string>('AT-SECRET'),
         expiresIn: '1h',
       }),
 
       this.JwtService.signAsync(jwtPayload, {
-        secret: this.config.get('RT-SECRET'),
+        secret: this.config.get<string>('RT-SECRET'),
         expiresIn: '7d',
       }),
     ]);
@@ -83,7 +82,7 @@ export class AccountService {
     try {
       const [vt] = await Promise.all([
         this.JwtService.signAsync(jwtPayload, {
-          secret: this.config.get('VT-SECRET'),
+          secret: this.config.get<string>('VT-SECRET'),
           expiresIn: '10m',
         }),
       ]);
@@ -91,6 +90,7 @@ export class AccountService {
       return {
         verify_token: vt,
       };
+
     } catch (error) {
       console.log(error);
     }
@@ -202,7 +202,7 @@ export class AccountService {
 
       const transport = nodemailer.createTransport(
         nodemailer_sendgrind({
-          apiKey: this.config.get('SENDGRIND_KEY'),
+          apiKey: this.config.get<string>('SENDGRIND_KEY'),
         }),
       );
 

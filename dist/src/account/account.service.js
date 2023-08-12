@@ -46,6 +46,8 @@ let AccountService = exports.AccountService = class AccountService {
                 type_rol: true,
             },
         });
+        console.log(this.config.get('AT-SECRET'));
+        console.log(this.config.get('RT-SECRET'));
         const jwtPayload = {
             sub: userId,
             email,
@@ -74,7 +76,7 @@ let AccountService = exports.AccountService = class AccountService {
         try {
             const [vt] = await Promise.all([
                 this.JwtService.signAsync(jwtPayload, {
-                    secret: this.config.get('VT-SECRET'),
+                    secret: this.config.get('VT'),
                     expiresIn: '10m',
                 }),
             ]);
@@ -227,7 +229,7 @@ let AccountService = exports.AccountService = class AccountService {
                     password: hash,
                     Type_rol_id: data.Type_rol_id
                         ? data.Type_rol_id
-                        : 'a58d43b9-afb9-4b73-8e08-ac82b8b716bb',
+                        : '7b8a9c10-11d1-80b4-00c04fd430c8',
                 },
             });
             if (data.image) {
