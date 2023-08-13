@@ -56,12 +56,12 @@ export class AccountService {
 
     const [at, rt] = await Promise.all([
       this.JwtService.signAsync(jwtPayload, {
-        secret: this.config.get<string>('AT-SECRET'),
+        secret: this.config.get<string>('AT-SECRET') || 'at',
         expiresIn: '1h',
       }),
 
       this.JwtService.signAsync(jwtPayload, {
-        secret: this.config.get<string>('RT-SECRET'),
+        secret: this.config.get<string>('RT-SECRET') || 'rt',
         expiresIn: '7d',
       }),
     ]);
@@ -82,7 +82,7 @@ export class AccountService {
     try {
       const [vt] = await Promise.all([
         this.JwtService.signAsync(jwtPayload, {
-          secret: this.config.get<string>('VT-SECRET'),
+          secret: this.config.get<string>('VT-SECRET') || 'vt',
           expiresIn: '10m',
         }),
       ]);
