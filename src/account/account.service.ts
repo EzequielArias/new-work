@@ -278,6 +278,7 @@ export class AccountService {
       const currentUser = {
         name: newUser.name,
         email: newUser.email,
+        image : newUser.image
       };
 
       return {
@@ -290,7 +291,6 @@ export class AccountService {
       }
     } catch (err: any) {
       const res = new CustomErr()
-      console.log(res.nestErr(err))
       throw res.nestErr(err)
     }
   }
@@ -320,6 +320,7 @@ export class AccountService {
       const currentUser = {
         name: user.name,
         email: user.email,
+        image : user.image
       };
 
       return  {
