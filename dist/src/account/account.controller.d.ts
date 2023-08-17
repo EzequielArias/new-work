@@ -15,4 +15,9 @@ export declare class AccountController {
     }>>;
     logout(userId: string): void;
     verifyAccount(userId: string): Promise<void>;
+    getUserRegister(userId: string): Promise<import("../interfaces/custom.response").ResponseData<string> | {
+        name: string;
+        image: string;
+        email: string;
+    }>;
 }

@@ -56,6 +56,14 @@ let AccountController = exports.AccountController = class AccountController {
             throw new Error(error.message);
         }
     }
+    getUserRegister(userId) {
+        try {
+            return this.account.getUserRegister(userId);
+        }
+        catch (error) {
+            throw new Error(error.message);
+        }
+    }
 };
 __decorate([
     (0, decorators_1.Public)(),
@@ -95,6 +103,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], AccountController.prototype, "verifyAccount", null);
+__decorate([
+    (0, common_1.Post)('getUser'),
+    __param(0, (0, get_current_user_id_decorator_1.GetCurrentUserId)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], AccountController.prototype, "getUserRegister", null);
 exports.AccountController = AccountController = __decorate([
     (0, swagger_1.ApiTags)('Accounts'),
     (0, common_1.Controller)('account'),

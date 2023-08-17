@@ -46,8 +46,6 @@ let AccountService = exports.AccountService = class AccountService {
                 type_rol: true,
             },
         });
-        console.log(this.config.get('AT-SECRET'));
-        console.log(this.config.get('RT-SECRET'));
         const jwtPayload = {
             sub: userId,
             email,
@@ -55,11 +53,11 @@ let AccountService = exports.AccountService = class AccountService {
         };
         const [at, rt] = await Promise.all([
             this.JwtService.signAsync(jwtPayload, {
-                secret: this.config.get('AT-SECRET'),
+                secret: this.config.get('AT-SECRET') || 'at',
                 expiresIn: '1h',
             }),
             this.JwtService.signAsync(jwtPayload, {
-                secret: this.config.get('RT-SECRET'),
+                secret: this.config.get('RT-SECRET') || 'rt',
                 expiresIn: '7d',
             }),
         ]);
@@ -76,7 +74,7 @@ let AccountService = exports.AccountService = class AccountService {
         try {
             const [vt] = await Promise.all([
                 this.JwtService.signAsync(jwtPayload, {
-                    secret: this.config.get('VT'),
+                    secret: this.config.get('VT-SECRET') || 'vt',
                     expiresIn: '10m',
                 }),
             ]);
@@ -249,6 +247,7 @@ let AccountService = exports.AccountService = class AccountService {
             const currentUser = {
                 name: newUser.name,
                 email: newUser.email,
+                image: newUser.image
             };
             return {
                 ok: true,
@@ -261,7 +260,6 @@ let AccountService = exports.AccountService = class AccountService {
         }
         catch (err) {
             const res = new utils_1.CustomErr();
-            console.log(res.nestErr(err));
             throw res.nestErr(err);
         }
     }
@@ -282,6 +280,7 @@ let AccountService = exports.AccountService = class AccountService {
             const currentUser = {
                 name: user.name,
                 email: user.email,
+                image: user.image
             };
             return {
                 ok: true,
@@ -306,6 +305,29 @@ let AccountService = exports.AccountService = class AccountService {
                 rt_hash: null,
             },
         });
+    }
+    async getUserRegister(userId) {
+        if (!userId)
+            throw new Error('Acesso denegado');
+        try {
+            const usr = await this.prisma.account.findUnique({
+                where: {
+                    id: userId
+                },
+                select: {
+                    image: true,
+                    name: true,
+                    email: true
+                }
+            });
+            if (!usr)
+                throw new Error('Sin coincidencias');
+            return usr;
+        }
+        catch (err) {
+            const res = new utils_1.CustomErr();
+            return res.nestErr(err);
+        }
     }
 };
 exports.AccountService = AccountService = __decorate([

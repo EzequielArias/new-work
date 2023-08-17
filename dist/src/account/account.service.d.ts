@@ -25,4 +25,9 @@ export declare class AccountService {
         currentUser: currentUser;
     } | string>>;
     logout(userId: string): Promise<void>;
+    getUserRegister(userId: string): Promise<ResponseData<string> | {
+        name: string;
+        image: string;
+        email: string;
+    }>;
 }

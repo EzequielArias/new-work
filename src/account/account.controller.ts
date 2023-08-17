@@ -70,4 +70,13 @@ export class AccountController {
       throw new Error(error.message);
     }
   }
+
+  @Post('getUser')
+  getUserRegister(@GetCurrentUserId() userId : string){
+    try {
+      return this.account.getUserRegister(userId);
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
 }

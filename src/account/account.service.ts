@@ -347,4 +347,27 @@ export class AccountService {
       },
     });
   }
+
+  async getUserRegister(userId : string){
+    if(!userId) throw new Error('Acesso denegado');
+
+    try {
+      const usr = await this.prisma.account.findUnique({
+        where : {
+          id : userId
+        },
+        select : {
+          image : true,
+          name : true,
+          email : true
+        }
+      })
+      if(!usr) throw new Error('Sin coincidencias');
+
+      return usr
+    } catch (err) {
+      const res = new CustomErr()
+      return res.nestErr(err)
+    }
+  }
 }
