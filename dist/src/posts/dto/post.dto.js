@@ -17,15 +17,10 @@ class PostDto {
 exports.PostDto = PostDto;
 __decorate([
     (0, swagger_1.ApiProperty)(),
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
+    __metadata("design:type", Object)
 ], PostDto.prototype, "images", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.Max)(250),
     __metadata("design:type", String)
 ], PostDto.prototype, "description", void 0);
 class EditPostDto {

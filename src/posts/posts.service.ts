@@ -2,12 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { EditPostDto, PostDto } from './dto';
 import { FirebaseService } from '../firebase/firebase.service';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 @Injectable()
 export class PostsService {
   constructor(
     private prisma: PrismaService,
     private firebase: FirebaseService,
+    private cloudinary : CloudinaryService
   ) {}
 
   async getPosts(offset: number, limit: number) {
@@ -36,6 +38,7 @@ export class PostsService {
   }
 
   async uploadPost(userId: string, dto: PostDto) {
+
     try {
       const user = await this.prisma.account.findUnique({
         where: { id: userId },
@@ -47,22 +50,28 @@ export class PostsService {
         data: {
           images: '',
           description: dto.description,
-          accountId: userId,
+          account : {
+            connect : {
+              id : userId
+            }
+          }
         },
       });
 
-      const url = await this.firebase.uploadFiles(dto.images, post.id, true);
+      /*const url = await this.firebase.uploadFiles(dto.images, post.id, true);*/
 
-      await this.prisma.posts.update({
+      const url = this.cloudinary.uploadFiles(dto.images)
+      console.log('llegando despues de cloudinary')
+      /*await this.prisma.posts.create({
         where: {
           id: post.id,
         },
         data: {
           images: url,
         },
-      });
+      });*/
 
-      return true;
+      return url;
     } catch (error) {
       console.log(error);
     }

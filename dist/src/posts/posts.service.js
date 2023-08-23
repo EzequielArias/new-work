@@ -13,10 +13,12 @@ exports.PostsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const firebase_service_1 = require("../firebase/firebase.service");
+const cloudinary_service_1 = require("../cloudinary/cloudinary.service");
 let PostsService = exports.PostsService = class PostsService {
-    constructor(prisma, firebase) {
+    constructor(prisma, firebase, cloudinary) {
         this.prisma = prisma;
         this.firebase = firebase;
+        this.cloudinary = cloudinary;
     }
     async getPosts(offset, limit) {
         try {
@@ -52,19 +54,16 @@ let PostsService = exports.PostsService = class PostsService {
                 data: {
                     images: '',
                     description: dto.description,
-                    accountId: userId,
+                    account: {
+                        connect: {
+                            id: userId
+                        }
+                    }
                 },
             });
-            const url = await this.firebase.uploadFiles(dto.images, post.id, true);
-            await this.prisma.posts.update({
-                where: {
-                    id: post.id,
-                },
-                data: {
-                    images: url,
-                },
-            });
-            return true;
+            const url = this.cloudinary.uploadFiles(dto.images);
+            console.log('llegando despues de cloudinary');
+            return url;
         }
         catch (error) {
             console.log(error);
@@ -120,6 +119,7 @@ let PostsService = exports.PostsService = class PostsService {
 exports.PostsService = PostsService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
-        firebase_service_1.FirebaseService])
+        firebase_service_1.FirebaseService,
+        cloudinary_service_1.CloudinaryService])
 ], PostsService);
 //# sourceMappingURL=posts.service.js.map

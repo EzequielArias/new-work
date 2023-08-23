@@ -12,6 +12,7 @@ import { FirebaseModule } from './firebase/firebase.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { AcademicModule } from './academic/academic.module';
 import { WorkexperienceModule } from './workexperience/workexperience.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Global()
 @Module({
@@ -20,15 +21,15 @@ import { WorkexperienceModule } from './workexperience/workexperience.module';
     AccountModule,
     ConfigModule.forRoot({ isGlobal: true }),
     RolModule,
+    CloudinaryModule,
     FollowerModule,
     PostsModule,
     CommentModule,
     FirebaseModule,
-    MulterModule.register({
-      dest: './uploads',
-    }),
+    MulterModule,
     AcademicModule,
     WorkexperienceModule,
+    CloudinaryModule,
   ],
   providers: [
     {

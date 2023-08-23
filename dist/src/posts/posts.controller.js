@@ -18,6 +18,9 @@ const decorators_1 = require("../common/decorators");
 const dto_1 = require("./dto");
 const posts_service_1 = require("./posts.service");
 const swagger_1 = require("@nestjs/swagger");
+const platform_express_1 = require("@nestjs/platform-express");
+const multer_1 = require("multer");
+const uuid_1 = require("uuid");
 let PostsController = exports.PostsController = class PostsController {
     constructor(posts) {
         this.posts = posts;
@@ -28,8 +31,8 @@ let PostsController = exports.PostsController = class PostsController {
     getPostById(postId) {
         return this.posts.getPostById(postId);
     }
-    uploadPost(userId, dto) {
-        this.posts.uploadPost(userId, dto);
+    uploadPost(userId, dto, file) {
+        console.log(file);
     }
     editPost(userId, dto, postId) {
         this.posts.editPost(userId, dto, postId);
@@ -59,10 +62,20 @@ __decorate([
 __decorate([
     (0, common_1.Post)('upload'),
     (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', {
+        storage: (0, multer_1.diskStorage)({
+            destination: './uploads',
+            filename: (req, file, cb) => {
+                let uid = (0, uuid_1.v4)();
+                cb(null, `${uid}.${file.originalname.split('.')[1]}`);
+            }
+        })
+    })),
     __param(0, (0, decorators_1.GetCurrentUserId)()),
     __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, dto_1.PostDto]),
+    __metadata("design:paramtypes", [String, dto_1.PostDto, Array]),
     __metadata("design:returntype", void 0)
 ], PostsController.prototype, "uploadPost", null);
 __decorate([

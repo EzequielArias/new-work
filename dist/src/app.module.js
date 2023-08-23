@@ -21,6 +21,7 @@ const firebase_module_1 = require("./firebase/firebase.module");
 const platform_express_1 = require("@nestjs/platform-express");
 const academic_module_1 = require("./academic/academic.module");
 const workexperience_module_1 = require("./workexperience/workexperience.module");
+const cloudinary_module_1 = require("./cloudinary/cloudinary.module");
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = __decorate([
@@ -31,15 +32,15 @@ exports.AppModule = AppModule = __decorate([
             account_module_1.AccountModule,
             config_1.ConfigModule.forRoot({ isGlobal: true }),
             rol_module_1.RolModule,
+            cloudinary_module_1.CloudinaryModule,
             follower_module_1.FollowerModule,
             posts_module_1.PostsModule,
             comment_module_1.CommentModule,
             firebase_module_1.FirebaseModule,
-            platform_express_1.MulterModule.register({
-                dest: './uploads',
-            }),
+            platform_express_1.MulterModule,
             academic_module_1.AcademicModule,
             workexperience_module_1.WorkexperienceModule,
+            cloudinary_module_1.CloudinaryModule,
         ],
         providers: [
             {
