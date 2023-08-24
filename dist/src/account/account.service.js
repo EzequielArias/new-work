@@ -247,7 +247,7 @@ let AccountService = exports.AccountService = class AccountService {
             const currentUser = {
                 name: newUser.name,
                 email: newUser.email,
-                image: newUser.image
+                image: newUser.image,
             };
             return {
                 ok: true,
@@ -255,7 +255,7 @@ let AccountService = exports.AccountService = class AccountService {
                 payload: {
                     currentUser,
                     tokens,
-                }
+                },
             };
         }
         catch (err) {
@@ -280,7 +280,7 @@ let AccountService = exports.AccountService = class AccountService {
             const currentUser = {
                 name: user.name,
                 email: user.email,
-                image: user.image
+                image: user.image,
             };
             return {
                 ok: true,
@@ -288,7 +288,7 @@ let AccountService = exports.AccountService = class AccountService {
                 payload: {
                     currentUser,
                     tokens,
-                }
+                },
             };
         }
         catch (err) {
@@ -312,13 +312,13 @@ let AccountService = exports.AccountService = class AccountService {
         try {
             const usr = await this.prisma.account.findUnique({
                 where: {
-                    id: userId
+                    id: userId,
                 },
                 select: {
                     image: true,
                     name: true,
-                    email: true
-                }
+                    email: true,
+                },
             });
             if (!usr)
                 throw new Error('Sin coincidencias');

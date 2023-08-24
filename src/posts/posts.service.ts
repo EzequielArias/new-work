@@ -1,15 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { EditPostDto, PostDto } from './dto';
-import { FirebaseService } from '../firebase/firebase.service';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 @Injectable()
 export class PostsService {
   constructor(
     private prisma: PrismaService,
-    private firebase: FirebaseService,
-    private cloudinary : CloudinaryService
+    private cloudinary: CloudinaryService,
   ) {}
 
   async getPosts(offset: number, limit: number) {
@@ -38,7 +36,6 @@ export class PostsService {
   }
 
   async uploadPost(userId: string, dto: PostDto) {
-
     try {
       const user = await this.prisma.account.findUnique({
         where: { id: userId },
@@ -48,37 +45,51 @@ export class PostsService {
 
       const post = await this.prisma.posts.create({
         data: {
-          images: '',
           description: dto.description,
-          account : {
-            connect : {
-              id : userId
-            }
-          }
+          account: {
+            connect: {
+              id: userId,
+            },
+          },
         },
       });
 
-      /*const url = await this.firebase.uploadFiles(dto.images, post.id, true);*/
+      let fileOriginalName = dto.images.map((file) => file.filename);
 
-      const url = this.cloudinary.uploadFiles(dto.images)
-      console.log('llegando despues de cloudinary')
-      /*await this.prisma.posts.create({
-        where: {
-          id: post.id,
-        },
-        data: {
-          images: url,
-        },
-      });*/
+      const url = await this.cloudinary.uploadFiles(fileOriginalName);
+      
+      if(url instanceof Array){
+        for (const fileUrl of url) {
+          await this.prisma.images.create({
+            data : {
+              url : fileUrl,
+              postsId : post.id
+            }
+          })
+        }
+      }
 
-      return url;
+      const result = await this.prisma.posts.findUnique({
+        where : {
+          id : post.id
+        },
+        include : {
+          images : {
+            select : {
+              url : true 
+            }
+          }
+        }
+      })
+
+      return result;
     } catch (error) {
       console.log(error);
     }
   }
 
   async editPost(userId: string, dto: EditPostDto, postId: string) {
-    try {
+    /*try {
       const oldPost = await this.prisma.posts.findUnique({
         where: {
           id: postId,
@@ -87,7 +98,7 @@ export class PostsService {
 
       if (userId !== oldPost.accountId) throw new Error('Credentials invalid');
 
-      let img: any;
+     /* let img: any;
       if (dto.images) {
         await this.firebase.removeFile(oldPost.id, true);
         img = await this.firebase.uploadFiles(dto.images, oldPost.id, true);
@@ -106,7 +117,7 @@ export class PostsService {
       return true;
     } catch (error) {
       console.log(error);
-    }
+    }*/
   }
 
   async removePost(userId: string, postId: string) {

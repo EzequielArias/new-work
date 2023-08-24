@@ -6,7 +6,7 @@ import { Request } from 'express';
 import { ConfigService } from '@nestjs/config';
 
 export class RtStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
-  constructor(config : ConfigService) {
+  constructor(config: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: 'RT-SECRET',

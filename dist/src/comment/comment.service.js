@@ -31,7 +31,7 @@ let CommentService = exports.CommentService = class CommentService {
             return {
                 ok: true,
                 statusCode: 200,
-                payload: 'comentario agregado'
+                payload: 'comentario agregado',
             };
         }
         catch (err) {
@@ -55,7 +55,7 @@ let CommentService = exports.CommentService = class CommentService {
             return {
                 ok: true,
                 statusCode: 200,
-                payload: 'comentario editado'
+                payload: 'comentario editado',
             };
         }
         catch (err) {
@@ -87,7 +87,7 @@ let CommentService = exports.CommentService = class CommentService {
             return {
                 ok: true,
                 statusCode: 200,
-                payload: 'comment removed'
+                payload: 'comment removed',
             };
         }
         catch (err) {
@@ -104,7 +104,7 @@ let CommentService = exports.CommentService = class CommentService {
             return {
                 ok: true,
                 statusCode: 200,
-                payload: comments
+                payload: comments,
             };
         }
         catch (err) {

@@ -47,7 +47,7 @@ export class AccountService {
         type_rol: true,
       },
     });
-    
+
     const jwtPayload: JwtPayload = {
       sub: userId,
       email,
@@ -90,7 +90,6 @@ export class AccountService {
       return {
         verify_token: vt,
       };
-
     } catch (error) {
       console.log(error);
     }
@@ -213,7 +212,7 @@ export class AccountService {
         html: HTMLtemplate,
       });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -234,7 +233,9 @@ export class AccountService {
 
   async signup(
     data: AccountDto,
-  ): Promise<ResponseData<{ tokens: Token; currentUser: currentUser } | string>> {
+  ): Promise<
+    ResponseData<{ tokens: Token; currentUser: currentUser } | string>
+  > {
     try {
       const hash = await argon.hash(data.password);
 
@@ -278,27 +279,29 @@ export class AccountService {
       const currentUser = {
         name: newUser.name,
         email: newUser.email,
-        image : newUser.image
+        image: newUser.image,
       };
 
       return {
-        ok : true,
-        statusCode : 201,
-        payload : {
+        ok: true,
+        statusCode: 201,
+        payload: {
           currentUser,
           tokens,
-        }
-      }
+        },
+      };
     } catch (err: any) {
-      const res = new CustomErr()
-      throw res.nestErr(err)
+      const res = new CustomErr();
+      throw res.nestErr(err);
     }
   }
 
   async signin(
     email: string,
     pass: string,
-  ): Promise<ResponseData<{ tokens: Token; currentUser: currentUser } | string >> {
+  ): Promise<
+    ResponseData<{ tokens: Token; currentUser: currentUser } | string>
+  > {
     try {
       const user = await this.prisma.account.findUnique({
         where: {
@@ -320,20 +323,20 @@ export class AccountService {
       const currentUser = {
         name: user.name,
         email: user.email,
-        image : user.image
+        image: user.image,
       };
 
-      return  {
-        ok : true,
-        statusCode : 200,
-        payload : {
+      return {
+        ok: true,
+        statusCode: 200,
+        payload: {
           currentUser,
           tokens,
-        }
-      }
+        },
+      };
     } catch (err: any) {
-      const res = new CustomErr()
-      return res.nestErr(err)
+      const res = new CustomErr();
+      return res.nestErr(err);
     }
   }
 
@@ -348,26 +351,26 @@ export class AccountService {
     });
   }
 
-  async getUserRegister(userId : string){
-    if(!userId) throw new Error('Acesso denegado');
+  async getUserRegister(userId: string) {
+    if (!userId) throw new Error('Acesso denegado');
 
     try {
       const usr = await this.prisma.account.findUnique({
-        where : {
-          id : userId
+        where: {
+          id: userId,
         },
-        select : {
-          image : true,
-          name : true,
-          email : true
-        }
-      })
-      if(!usr) throw new Error('Sin coincidencias');
+        select: {
+          image: true,
+          name: true,
+          email: true,
+        },
+      });
+      if (!usr) throw new Error('Sin coincidencias');
 
-      return usr
+      return usr;
     } catch (err) {
-      const res = new CustomErr()
-      return res.nestErr(err)
+      const res = new CustomErr();
+      return res.nestErr(err);
     }
   }
 }

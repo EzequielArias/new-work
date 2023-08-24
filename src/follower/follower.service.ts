@@ -8,7 +8,10 @@ import { PersonData } from './types';
 export class FollowerService {
   constructor(private prisma: PrismaService) {}
 
-  async follow(currentUserId: string, personId: string) : Promise<ResponseData<string>> {
+  async follow(
+    currentUserId: string,
+    personId: string,
+  ): Promise<ResponseData<string>> {
     try {
       // Follow the person selected.
       await this.prisma.follower.create({
@@ -19,17 +22,20 @@ export class FollowerService {
       });
 
       return {
-        ok : true,
-        statusCode : 200,
-        payload : 'Follower'
-      }
+        ok: true,
+        statusCode: 200,
+        payload: 'Follower',
+      };
     } catch (err) {
       const res = new CustomErr();
-      return res.nestErr(err)
+      return res.nestErr(err);
     }
   }
 
-  async unfollow(currentUserId: string, personId: string) : Promise<ResponseData<string>>{
+  async unfollow(
+    currentUserId: string,
+    personId: string,
+  ): Promise<ResponseData<string>> {
     // We browse de record of a person to delete for unfollow.
     try {
       await this.prisma.follower.delete({
@@ -42,17 +48,19 @@ export class FollowerService {
       });
 
       return {
-        ok : true,
-        statusCode : 200,
-        payload : 'unfollow'
-      }
+        ok: true,
+        statusCode: 200,
+        payload: 'unfollow',
+      };
     } catch (err) {
       const res = new CustomErr();
-      return res.nestErr(err)
+      return res.nestErr(err);
     }
   }
 
-  async getFollowersData(currentUserId: string) : Promise<ResponseData<any| string>>{
+  async getFollowersData(
+    currentUserId: string,
+  ): Promise<ResponseData<any | string>> {
     try {
       const followers = await this.prisma.follower.findMany({
         where: {
@@ -85,16 +93,16 @@ export class FollowerService {
       });
 
       return {
-        ok : true,
-        statusCode : 200,
-        payload : {
+        ok: true,
+        statusCode: 200,
+        payload: {
           followers,
           following,
-        }
-      }
+        },
+      };
     } catch (err) {
       const res = new CustomErr();
-      return res.nestErr(err)
+      return res.nestErr(err);
     }
   }
 }

@@ -27,17 +27,19 @@ export class AcademicService {
       });
 
       return {
-        ok : true,
-        statusCode : 200,
-        payload : 'academic update'
-      }
+        ok: true,
+        statusCode: 200,
+        payload: 'academic update',
+      };
     } catch (err: any) {
-      const res = new CustomErr()
-      return res.nestErr(err)
+      const res = new CustomErr();
+      return res.nestErr(err);
     }
   }
 
-  async getAllAcademics(userId: string): Promise<ResponseData<any | Academic[]>> {
+  async getAllAcademics(
+    userId: string,
+  ): Promise<ResponseData<any | Academic[]>> {
     try {
       const result = await this.prisma.academic.findMany({
         where: {
@@ -48,17 +50,17 @@ export class AcademicService {
       if (!result) throw new Error('No se encontraron coincidencias');
 
       return {
-        ok : true,
-        statusCode : 200,
-        payload : result
+        ok: true,
+        statusCode: 200,
+        payload: result,
       };
     } catch (err: any) {
-      const res = new CustomErr()
-      return res.nestErr(err)
+      const res = new CustomErr();
+      return res.nestErr(err);
     }
   }
 
-  async updateAcademic(userId: string, dto: AcademicDto, academicId : string) {
+  async updateAcademic(userId: string, dto: AcademicDto, academicId: string) {
     try {
       const validato = await this.prisma.academic.findUnique({
         where: {
@@ -66,7 +68,8 @@ export class AcademicService {
         },
       });
 
-      if (validato.id !== userId) throw new ForbiddenException('Credentials Invalid');
+      if (validato.id !== userId)
+        throw new ForbiddenException('Credentials Invalid');
 
       await this.prisma.academic.update({
         where: {
@@ -80,12 +83,15 @@ export class AcademicService {
         },
       });
     } catch (err: any) {
-      const res = new CustomErr()
-      return res.nestErr(err)
+      const res = new CustomErr();
+      return res.nestErr(err);
     }
   }
 
-  async removeAcademic(userId: string, academicSlotId: string) : Promise<ResponseData<string>>{
+  async removeAcademic(
+    userId: string,
+    academicSlotId: string,
+  ): Promise<ResponseData<string>> {
     try {
       const validato = await this.prisma.academic.findUnique({
         where: {
@@ -93,7 +99,8 @@ export class AcademicService {
         },
       });
 
-      if (validato.id !== userId) throw new ForbiddenException('Credentials Invalid');
+      if (validato.id !== userId)
+        throw new ForbiddenException('Credentials Invalid');
 
       await this.prisma.academic.delete({
         where: {
@@ -102,13 +109,13 @@ export class AcademicService {
       });
 
       return {
-        ok : true,
-        statusCode : 200,
-        payload : 'academic slot removed succesfully'
-      }
+        ok: true,
+        statusCode: 200,
+        payload: 'academic slot removed succesfully',
+      };
     } catch (err: any) {
-      const res = new CustomErr()
-      return res.nestErr(err)
+      const res = new CustomErr();
+      return res.nestErr(err);
     }
   }
 }

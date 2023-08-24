@@ -52,51 +52,45 @@ let PostsService = exports.PostsService = class PostsService {
                 throw new Error('Credentials invalid');
             const post = await this.prisma.posts.create({
                 data: {
-                    images: '',
                     description: dto.description,
                     account: {
                         connect: {
-                            id: userId
-                        }
-                    }
+                            id: userId,
+                        },
+                    },
                 },
             });
-            const url = this.cloudinary.uploadFiles(dto.images);
-            console.log('llegando despues de cloudinary');
-            return url;
+            let fileOriginalName = dto.images.map((file) => file.filename);
+            const url = await this.cloudinary.uploadFiles(fileOriginalName);
+            if (url instanceof Array) {
+                for (const fileUrl of url) {
+                    await this.prisma.images.create({
+                        data: {
+                            url: fileUrl,
+                            postsId: post.id
+                        }
+                    });
+                }
+            }
+            const result = await this.prisma.posts.findUnique({
+                where: {
+                    id: post.id
+                },
+                include: {
+                    images: {
+                        select: {
+                            url: true
+                        }
+                    }
+                }
+            });
+            return result;
         }
         catch (error) {
             console.log(error);
         }
     }
     async editPost(userId, dto, postId) {
-        try {
-            const oldPost = await this.prisma.posts.findUnique({
-                where: {
-                    id: postId,
-                },
-            });
-            if (userId !== oldPost.accountId)
-                throw new Error('Credentials invalid');
-            let img;
-            if (dto.images) {
-                await this.firebase.removeFile(oldPost.id, true);
-                img = await this.firebase.uploadFiles(dto.images, oldPost.id, true);
-            }
-            await this.prisma.posts.update({
-                where: {
-                    id: dto.postId,
-                },
-                data: {
-                    images: dto.images ? img : oldPost.images,
-                    description: dto.description ? dto.description : oldPost.description,
-                },
-            });
-            return true;
-        }
-        catch (error) {
-            console.log(error);
-        }
     }
     async removePost(userId, postId) {
         const selectedPost = await this.prisma.posts.findUnique({

@@ -28,7 +28,6 @@ import {
   PrismaClientValidationError,
 } from '@prisma/client/runtime';
 
-
 import { ResponseData } from 'src/interfaces/custom.response';
 
 export class CustomErr {
@@ -296,7 +295,7 @@ export class CustomErr {
         statusCode: 500,
         payload: err.message,
       };
-    return res
+      return res;
     }
   }
 }

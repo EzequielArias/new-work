@@ -28,7 +28,7 @@ let FollowerService = exports.FollowerService = class FollowerService {
             return {
                 ok: true,
                 statusCode: 200,
-                payload: 'Follower'
+                payload: 'Follower',
             };
         }
         catch (err) {
@@ -49,7 +49,7 @@ let FollowerService = exports.FollowerService = class FollowerService {
             return {
                 ok: true,
                 statusCode: 200,
-                payload: 'unfollow'
+                payload: 'unfollow',
             };
         }
         catch (err) {
@@ -93,7 +93,7 @@ let FollowerService = exports.FollowerService = class FollowerService {
                 payload: {
                     followers,
                     following,
-                }
+                },
             };
         }
         catch (err) {

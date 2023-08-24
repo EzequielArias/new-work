@@ -17,7 +17,7 @@ class PostDto {
 exports.PostDto = PostDto;
 __decorate([
     (0, swagger_1.ApiProperty)(),
-    __metadata("design:type", Object)
+    __metadata("design:type", Array)
 ], PostDto.prototype, "images", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),

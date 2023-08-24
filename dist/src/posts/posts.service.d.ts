@@ -9,7 +9,11 @@ export declare class PostsService {
     constructor(prisma: PrismaService, firebase: FirebaseService, cloudinary: CloudinaryService);
     getPosts(offset: number, limit: number): Promise<unknown>;
     getPostById(postId: string): Promise<import(".prisma/client").Posts>;
-    uploadPost(userId: string, dto: PostDto): Promise<boolean>;
-    editPost(userId: string, dto: EditPostDto, postId: string): Promise<boolean>;
+    uploadPost(userId: string, dto: PostDto): Promise<import(".prisma/client").Posts & {
+        images: {
+            url: string;
+        }[];
+    }>;
+    editPost(userId: string, dto: EditPostDto, postId: string): Promise<void>;
     removePost(userId: string, postId: string): Promise<void>;
 }

@@ -32,7 +32,7 @@ let AcademicService = exports.AcademicService = class AcademicService {
             return {
                 ok: true,
                 statusCode: 200,
-                payload: 'academic update'
+                payload: 'academic update',
             };
         }
         catch (err) {
@@ -52,7 +52,7 @@ let AcademicService = exports.AcademicService = class AcademicService {
             return {
                 ok: true,
                 statusCode: 200,
-                payload: result
+                payload: result,
             };
         }
         catch (err) {
@@ -103,7 +103,7 @@ let AcademicService = exports.AcademicService = class AcademicService {
             return {
                 ok: true,
                 statusCode: 200,
-                payload: 'academic slot removed succesfully'
+                payload: 'academic slot removed succesfully',
             };
         }
         catch (err) {

@@ -6,6 +6,10 @@ export declare class PostsController {
     constructor(posts: PostsService);
     getPosts(offset: number, limit: number): Promise<unknown>;
     getPostById(postId: string): Promise<import(".prisma/client").Posts>;
-    uploadPost(userId: string, dto: PostDto, file: Express.Multer.File[]): void;
+    uploadPost(userId: string, dto: PostDto, files: Array<Express.Multer.File>): Promise<import(".prisma/client").Posts & {
+        images: {
+            url: string;
+        }[];
+    }>;
     editPost(userId: string, dto: EditPostDto, postId: string): void;
 }

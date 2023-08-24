@@ -43,9 +43,7 @@ export class AccountController {
   @Public()
   @Post('signin')
   @HttpCode(HttpStatus.OK)
-  signin(
-    @Body() dto: AccountSignInDto,
-  ){
+  signin(@Body() dto: AccountSignInDto) {
     try {
       return this.account.signin(dto.email, dto.password);
     } catch (e: any) {
@@ -72,11 +70,11 @@ export class AccountController {
   }
 
   @Post('getUser')
-  getUserRegister(@GetCurrentUserId() userId : string){
+  getUserRegister(@GetCurrentUserId() userId: string) {
     try {
       return this.account.getUserRegister(userId);
     } catch (error) {
-      throw new Error(error.message)
+      throw new Error(error.message);
     }
   }
 }

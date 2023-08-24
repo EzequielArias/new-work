@@ -10,18 +10,12 @@ export class FollowerController {
   constructor(private FollowerService: FollowerService) {}
 
   @Post('follow')
-  follow(
-    @Body() personData: PersonData,
-    @GetCurrentUserId() userId: string,
-  ) {
+  follow(@Body() personData: PersonData, @GetCurrentUserId() userId: string) {
     return this.FollowerService.follow(userId, personData.id);
   }
 
   @Post('unfollow')
-  unfollow(
-    @Body() personData: PersonData,
-    @GetCurrentUserId() userId: string,
-  ) {
+  unfollow(@Body() personData: PersonData, @GetCurrentUserId() userId: string) {
     return this.FollowerService.unfollow(userId, personData.id);
   }
 

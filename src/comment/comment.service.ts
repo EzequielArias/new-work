@@ -9,7 +9,11 @@ import { ResponseData } from 'src/interfaces/custom.response';
 export class CommentService {
   constructor(private prisma: PrismaService) {}
 
-  async uploadComment(currentUserId: string, postId: string, dto: CommentDto) : Promise<ResponseData<any>>{
+  async uploadComment(
+    currentUserId: string,
+    postId: string,
+    dto: CommentDto,
+  ): Promise<ResponseData<any>> {
     try {
       if (!currentUserId || !postId) throw new Error('Credentials invalid');
 
@@ -22,17 +26,21 @@ export class CommentService {
       });
 
       return {
-        ok :true,
-        statusCode : 200,
-        payload : 'comentario agregado'
-      }
+        ok: true,
+        statusCode: 200,
+        payload: 'comentario agregado',
+      };
     } catch (err) {
-      const res = new CustomErr()
-      return res.nestErr(err)
+      const res = new CustomErr();
+      return res.nestErr(err);
     }
   }
 
-  async editComment(currentUserId: string, commentId: string, dto: CommentDto) : Promise<ResponseData<any>> {
+  async editComment(
+    currentUserId: string,
+    commentId: string,
+    dto: CommentDto,
+  ): Promise<ResponseData<any>> {
     try {
       const comment = await this.getCommentById(currentUserId);
 
@@ -49,13 +57,13 @@ export class CommentService {
       });
 
       return {
-        ok : true,
-        statusCode : 200,
-        payload : 'comentario editado'
-      }
+        ok: true,
+        statusCode: 200,
+        payload: 'comentario editado',
+      };
     } catch (err) {
-      const res = new CustomErr()
-      return res.nestErr(err)
+      const res = new CustomErr();
+      return res.nestErr(err);
     }
   }
 
@@ -68,7 +76,10 @@ export class CommentService {
     return comment;
   }
 
-  async removeComment(currentUserId: string, commentId: string) : Promise<ResponseData<any>>{
+  async removeComment(
+    currentUserId: string,
+    commentId: string,
+  ): Promise<ResponseData<any>> {
     try {
       const comment = await this.getCommentById(currentUserId);
 
@@ -85,33 +96,36 @@ export class CommentService {
       });
 
       return {
-        ok : true,
-        statusCode : 200,
-        payload : 'comment removed'
-      }
-
+        ok: true,
+        statusCode: 200,
+        payload: 'comment removed',
+      };
     } catch (err) {
-      const res = new CustomErr()
-      return res.nestErr(err)
+      const res = new CustomErr();
+      return res.nestErr(err);
     }
   }
 
-  async getPostComment(postId: string, limit: string, offset: string) : Promise<ResponseData<CommentShape | string>>{
+  async getPostComment(
+    postId: string,
+    limit: string,
+    offset: string,
+  ): Promise<ResponseData<CommentShape | string>> {
     try {
       const sqlCommand = `SELECT * FROM Comment 
             WHERE isDeleted = false AND postsId = ${postId} 
             OFFSET ${offset} LIMIT ${limit}`;
 
-      const comments : CommentShape = await this.prisma.$queryRaw`${sqlCommand}`;
+      const comments: CommentShape = await this.prisma.$queryRaw`${sqlCommand}`;
 
       return {
-        ok : true,
-        statusCode : 200,
-        payload : comments
+        ok: true,
+        statusCode: 200,
+        payload: comments,
       };
     } catch (err) {
-      const res = new CustomErr()
-      return res.nestErr(err)
+      const res = new CustomErr();
+      return res.nestErr(err);
     }
   }
 }

@@ -1,6 +1,6 @@
 /// <reference types="multer" />
 export declare class PostDto {
-    images: Express.Multer.File;
+    images: Array<Express.Multer.File>;
     description: string;
 }
 export declare class EditPostDto {

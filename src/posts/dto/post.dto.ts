@@ -3,7 +3,7 @@ import { IsNotEmpty, IsString, Max } from 'class-validator';
 
 export class PostDto {
   @ApiProperty()
-  images: Express.Multer.File;
+  images: Array<Express.Multer.File>;
 
   @ApiProperty()
   description: string;

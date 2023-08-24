@@ -9,21 +9,20 @@ import {
   Param,
   Put,
   UseInterceptors,
-  UploadedFile,
+  UploadedFiles,
 } from '@nestjs/common';
 import { GetCurrentUserId, Public } from '../common/decorators';
 import { PostDto, EditPostDto } from './dto';
 import { PostsService } from './posts.service';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 
 @ApiTags('Posts')
 @Controller('posts')
 export class PostsController {
-
-  constructor(private posts: PostsService){}
+  constructor(private posts: PostsService) {}
 
   @Public()
   @Get('get')
@@ -43,21 +42,24 @@ export class PostsController {
 
   @Post('upload')
   @HttpCode(HttpStatus.CREATED)
-  @UseInterceptors(FileInterceptor('file', {
-    storage : diskStorage({
-      destination : './uploads',
-      filename : (req, file, cb) => {
-        let uid : string = uuidv4()
-        cb(null, `${uid}.${file.originalname.split('.')[1]}`)
-      }
-    })
-  }))
+  @UseInterceptors(
+    FilesInterceptor('file', 5, {
+      storage: diskStorage({
+        destination: './dist/uploads',
+        filename: (req, file, cb) => {
+          let uid: string = uuidv4();
+          cb(null, `${uid}.${file.originalname.split('.')[1]}`);
+        },
+      }),
+    }),
+  )
   uploadPost(
-  @GetCurrentUserId() userId: string, 
-  @Body() dto: PostDto,
-  @UploadedFile() file : Express.Multer.File[]) {
-    console.log(file)
-    //this.posts.uploadPost(userId, dto);
+    @GetCurrentUserId() userId: string,
+    @Body() dto: PostDto,
+    @UploadedFiles() files: Array<Express.Multer.File>,
+  ) {
+    dto.images = files;
+    return this.posts.uploadPost(userId, dto);
   }
 
   @Put('edit/:id')

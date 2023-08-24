@@ -31,8 +31,9 @@ let PostsController = exports.PostsController = class PostsController {
     getPostById(postId) {
         return this.posts.getPostById(postId);
     }
-    uploadPost(userId, dto, file) {
-        console.log(file);
+    uploadPost(userId, dto, files) {
+        dto.images = files;
+        return this.posts.uploadPost(userId, dto);
     }
     editPost(userId, dto, postId) {
         this.posts.editPost(userId, dto, postId);
@@ -62,20 +63,21 @@ __decorate([
 __decorate([
     (0, common_1.Post)('upload'),
     (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', {
+    (0, common_1.UseInterceptors)((0, platform_express_1.FilesInterceptor)('file', 5, {
         storage: (0, multer_1.diskStorage)({
-            destination: './uploads',
+            destination: './dist/uploads',
             filename: (req, file, cb) => {
                 let uid = (0, uuid_1.v4)();
                 cb(null, `${uid}.${file.originalname.split('.')[1]}`);
-            }
-        })
+            },
+        }),
     })),
     __param(0, (0, decorators_1.GetCurrentUserId)()),
     __param(1, (0, common_1.Body)()),
-    __param(2, (0, common_1.UploadedFile)()),
+    __param(2, (0, common_1.UploadedFiles)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, dto_1.PostDto, Array]),
+    __metadata("design:paramtypes", [String, dto_1.PostDto,
+        Array]),
     __metadata("design:returntype", void 0)
 ], PostsController.prototype, "uploadPost", null);
 __decorate([

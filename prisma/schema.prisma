@@ -36,9 +36,16 @@ model Account {
   workplace   WorkExperience[]
 }
 
+model Images {
+  id String @id @default(uuid())
+  url String 
+  post Posts @relation(fields: [postsId], references: [id])
+  postsId String
+}
+
 model Posts {
   id          String    @id @default(uuid())
-  images      String
+  images      Images[]
   description String
   account     Account   @relation(fields: [accountId], references: [id])
   accountId   String

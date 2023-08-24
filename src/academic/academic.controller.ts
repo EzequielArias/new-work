@@ -1,4 +1,12 @@
-import { Body, Controller, Post, Get, Put, Delete, Param } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Get,
+  Put,
+  Delete,
+  Param,
+} from '@nestjs/common';
 import { GetCurrentUserId } from '../common/decorators';
 import { AcademicDto } from './dto';
 import { AcademicService } from './academic.service';
@@ -21,9 +29,10 @@ export class AcademicController {
 
   @Put('update/:id')
   updateAcademic(
-   @GetCurrentUserId() userId: string
-  ,@Body() dto: AcademicDto
-  ,@Param('id') academicId : string) {
+    @GetCurrentUserId() userId: string,
+    @Body() dto: AcademicDto,
+    @Param('id') academicId: string,
+  ) {
     return this.academic.updateAcademic(userId, dto, academicId);
   }
 

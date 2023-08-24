@@ -1,7 +1,6 @@
 import { IsBoolean, IsDate, IsNotEmpty, IsString, Max } from 'class-validator';
 
 export class AcademicDto {
-
   @IsString()
   @IsNotEmpty()
   institution: string;
