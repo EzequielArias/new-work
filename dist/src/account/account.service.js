@@ -17,14 +17,12 @@ const argon = require("argon2");
 const config_1 = require("@nestjs/config");
 const nodemailer = require("nodemailer");
 const nodemailer_sendgrind = require("nodemailer-sendgrid");
-const firebase_service_1 = require("../firebase/firebase.service");
 const utils_1 = require("../utils");
 let AccountService = exports.AccountService = class AccountService {
-    constructor(prisma, JwtService, config, firebase) {
+    constructor(prisma, JwtService, config) {
         this.prisma = prisma;
         this.JwtService = JwtService;
         this.config = config;
-        this.firebase = firebase;
     }
     async updateRt(userId, rt) {
         const hash = await argon.hash(rt);
@@ -230,17 +228,6 @@ let AccountService = exports.AccountService = class AccountService {
                         : '7b8a9c10-11d1-80b4-00c04fd430c8',
                 },
             });
-            if (data.image) {
-                const url = await this.firebase.uploadFiles(data.image, newUser.id, false);
-                await this.prisma.account.update({
-                    where: {
-                        id: newUser.id,
-                    },
-                    data: {
-                        image: url,
-                    },
-                });
-            }
             const tokens = await this.getToken(newUser.id, newUser.email);
             await this.updateRt(newUser.id, tokens.refresh_token);
             await this.sendVerificationEmail(newUser.email, newUser.id);
@@ -334,7 +321,6 @@ exports.AccountService = AccountService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
         jwt_1.JwtService,
-        config_1.ConfigService,
-        firebase_service_1.FirebaseService])
+        config_1.ConfigService])
 ], AccountService);
 //# sourceMappingURL=account.service.js.map

@@ -13,7 +13,6 @@ import {
 } from './types';
 import * as nodemailer from 'nodemailer';
 import * as nodemailer_sendgrind from 'nodemailer-sendgrid';
-import { FirebaseService } from '../firebase/firebase.service';
 import { CustomErr } from '../utils';
 import { ResponseData } from 'src/interfaces/custom.response';
 
@@ -23,7 +22,6 @@ export class AccountService {
     private prisma: PrismaService,
     private JwtService: JwtService,
     private config: ConfigService,
-    private firebase: FirebaseService,
   ) {}
 
   async updateRt(userId: string, rt: string) {
@@ -251,23 +249,6 @@ export class AccountService {
             : '7b8a9c10-11d1-80b4-00c04fd430c8',
         },
       });
-
-      if (data.image) {
-        const url = await this.firebase.uploadFiles(
-          data.image,
-          newUser.id,
-          false,
-        );
-
-        await this.prisma.account.update({
-          where: {
-            id: newUser.id,
-          },
-          data: {
-            image: url,
-          },
-        });
-      }
 
       const tokens = await this.getToken(newUser.id, newUser.email);
 

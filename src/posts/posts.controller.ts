@@ -10,6 +10,7 @@ import {
   Put,
   UseInterceptors,
   UploadedFiles,
+  Req,
 } from '@nestjs/common';
 import { GetCurrentUserId, Public } from '../common/decorators';
 import { PostDto, EditPostDto } from './dto';
@@ -55,10 +56,10 @@ export class PostsController {
   )
   uploadPost(
     @GetCurrentUserId() userId: string,
-    @Body() dto: PostDto,
     @UploadedFiles() files: Array<Express.Multer.File>,
+    @Body() dto : PostDto
   ) {
-    dto.images = files;
+    if(files) dto.images = files
     return this.posts.uploadPost(userId, dto);
   }
 

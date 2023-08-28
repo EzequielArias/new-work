@@ -17,7 +17,6 @@ const guards_1 = require("./common/guards");
 const follower_module_1 = require("./follower/follower.module");
 const posts_module_1 = require("./posts/posts.module");
 const comment_module_1 = require("./comment/comment.module");
-const firebase_module_1 = require("./firebase/firebase.module");
 const platform_express_1 = require("@nestjs/platform-express");
 const academic_module_1 = require("./academic/academic.module");
 const workexperience_module_1 = require("./workexperience/workexperience.module");
@@ -36,7 +35,6 @@ exports.AppModule = AppModule = __decorate([
             follower_module_1.FollowerModule,
             posts_module_1.PostsModule,
             comment_module_1.CommentModule,
-            firebase_module_1.FirebaseModule,
             platform_express_1.MulterModule,
             academic_module_1.AcademicModule,
             workexperience_module_1.WorkexperienceModule,

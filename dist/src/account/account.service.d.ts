@@ -3,14 +3,12 @@ import { AccountDto } from './dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Token, currentUser, VerifyToken } from './types';
-import { FirebaseService } from '../firebase/firebase.service';
 import { ResponseData } from 'src/interfaces/custom.response';
 export declare class AccountService {
     private prisma;
     private JwtService;
     private config;
-    private firebase;
-    constructor(prisma: PrismaService, JwtService: JwtService, config: ConfigService, firebase: FirebaseService);
+    constructor(prisma: PrismaService, JwtService: JwtService, config: ConfigService);
     updateRt(userId: string, rt: string): Promise<void>;
     getToken(userId: string, email: string): Promise<Token>;
     verifyToken(userId: string, email: string): Promise<VerifyToken>;

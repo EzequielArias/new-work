@@ -31,8 +31,9 @@ let PostsController = exports.PostsController = class PostsController {
     getPostById(postId) {
         return this.posts.getPostById(postId);
     }
-    uploadPost(userId, dto, files) {
-        dto.images = files;
+    uploadPost(userId, files, dto) {
+        if (files)
+            dto.images = files;
         return this.posts.uploadPost(userId, dto);
     }
     editPost(userId, dto, postId) {
@@ -73,11 +74,11 @@ __decorate([
         }),
     })),
     __param(0, (0, decorators_1.GetCurrentUserId)()),
-    __param(1, (0, common_1.Body)()),
-    __param(2, (0, common_1.UploadedFiles)()),
+    __param(1, (0, common_1.UploadedFiles)()),
+    __param(2, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, dto_1.PostDto,
-        Array]),
+    __metadata("design:paramtypes", [String, Array,
+        dto_1.PostDto]),
     __metadata("design:returntype", void 0)
 ], PostsController.prototype, "uploadPost", null);
 __decorate([
