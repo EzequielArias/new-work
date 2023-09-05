@@ -5,7 +5,16 @@ export declare class PostsService {
     private prisma;
     private cloudinary;
     constructor(prisma: PrismaService, cloudinary: CloudinaryService);
-    getPosts(offset: number, limit: number): Promise<unknown>;
+    getPosts(offset: number, limit: number): Promise<(import(".prisma/client").Posts & {
+        account: {
+            id: string;
+            name: string;
+            image: string;
+        };
+        images: {
+            url: string;
+        }[];
+    })[]>;
     getPostById(postId: string): Promise<import(".prisma/client").Posts>;
     uploadPost(userId: string, dto: PostDto): Promise<import(".prisma/client").Posts & {
         images: {

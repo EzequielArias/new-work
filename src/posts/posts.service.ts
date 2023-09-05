@@ -12,9 +12,24 @@ export class PostsService {
 
   async getPosts(offset: number, limit: number) {
     try {
-      const SqlQuery = `SELECT * FROM Posts OFFSET ${offset} LIMIT ${limit};`;
-
-      const result = await this.prisma.$queryRaw`${SqlQuery}`;
+      const result = await this.prisma.posts.findMany({
+        take : Number(limit),
+        skip : Number(offset),
+        include : {
+          images : {
+            select : {
+              url : true
+            }
+          },
+          account : {
+            select : {
+              name : true,
+              image : true,
+              id : true
+            }
+          }
+        }
+      })
 
       return result;
     } catch (error) {
